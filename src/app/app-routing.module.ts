@@ -5,6 +5,7 @@ import { JugadoresComponent } from './jugadores/jugadores.component';
 import { CalendarioDeAsistenciaComponent } from './calendario-de-asistencia/calendario-de-asistencia.component';
 import { EntrenamientoComponent } from './entrenamiento/entrenamiento.component';
 import { ContabilidadComponent } from './contabilidad/contabilidad.component';
+import { JugadorComponent } from './jugador/jugador.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -12,6 +13,7 @@ const routes: Routes = [
   { path: 'calendarioDeAsistencia', component: CalendarioDeAsistenciaComponent },
   { path: 'entrenamiento', component: EntrenamientoComponent },
   { path: 'contabilidad', component: ContabilidadComponent },
+  { path: 'jugador', component: JugadorComponent }
 ];
 
 @NgModule({
