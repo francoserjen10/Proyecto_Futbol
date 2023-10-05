@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { Jugador } from '../interfaces/Jugador';
 
 @Component({
   selector: 'app-jugadores',
@@ -7,7 +8,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./jugadores.component.css']
 })
 
-export class JugadoresComponent {
+export class JugadoresComponent{
 
   // constructor
   public constructor(private router: Router) { }
