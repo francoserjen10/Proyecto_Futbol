@@ -7,15 +7,7 @@ import { Jugador } from './interfaces/Jugador';
 export class JugadoresService {
 
   //Atributo donde voy a almacenar los jugadores creados
-  jugadores: Jugador[] = [
-    {
-      urlImagen: "",
-      nombre: "",
-      apellido: "",
-      fechaDeNacimiento: "",
-      club: "",
-    }
-  ];
+  jugadores: Jugador[] = [];
 
   constructor() { }
 
