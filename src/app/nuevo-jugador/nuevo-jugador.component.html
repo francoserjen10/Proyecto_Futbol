@@ -4,25 +4,25 @@
     </div>
     <div class="container-info-new-player">
         <div class="form-floating mb-3">
-            <input type="name" class="form-control" id="floatingInput" placeholder="Nombre">
+            <input type="text" class="form-control" id="floatingInput" placeholder="Nombre" [(ngModel)]="nuevoJugador.nombre">
             <label for="floatingInput">Ingrese su nombre</label>
         </div>
         <div class="form-floating mb-3">
-            <input type="surname" class="form-control" id="floatingSurname" placeholder="Apellido">
+            <input type="text" class="form-control" id="floatingSurname" placeholder="Apellido" [(ngModel)]="nuevoJugador.apellido">
             <label for="floatingSurname">Ingrese su apellido</label>
         </div>
         <div class="form-floating mb-3">
-            <input type="birthdate" class="form-control" id="floatingBirthdate" placeholder="Fecha de nacimiento">
+            <input type="date" class="form-control" id="floatingBirthdate" placeholder="Fecha de nacimiento" [(ngModel)]="nuevoJugador.fechaDeNacimiento">
             <label for="floatingBirthdate">Ingrese su fecha de nacimiento</label>
         </div>
         <div class="form-floating mb-3">
-            <input type="club" class="form-control" id="floatingClub" placeholder="Club">
+            <input type="text" class="form-control" id="floatingClub" placeholder="Club" [(ngModel)]="nuevoJugador.club">
             <label for="floatingClub">Ingrese su club actual</label>
         </div>
     </div>
     <div class="container-button">
         <div class="button">
-            <button class="btn btn-primary" type="submit">Aceptar</button>
+            <button class="btn btn-primary" type="submit" (click)="agregarJugadores()">Aceptar</button>
         </div>
     </div>
 </div>
