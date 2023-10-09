@@ -1,3 +1,33 @@
 <div class="container">
-    <p>jugador works!</p>
+    <div class="title">
+        <h1>Jugador</h1>
+    </div>
+    <div class="container-player" *ngFor="let jugador of jugador">
+        <!-- <-- Mostrar foto del jugador -->
+        <div class="imagen-player">
+            <img src="" alt="" />
+        </div>
+        <div class="container-input-player">
+            <div>
+                <!-- Mostrar el nombre -->
+                <input type="text" [(ngModel)]="jugador.nombre" />
+            </div>
+            <div>
+                <!-- mostrar el apellido -->
+                <input type="text" [(ngModel)]="jugador.apellido" />
+            </div>
+            <div>
+                <!-- mostrar la fecha de nacimiento -->
+                <input type="text" [(ngModel)]="jugador.fechaDeNacimiento" />
+            </div>
+            <div>
+                <!-- Mostrar el club -->
+                <input type="text" [(ngModel)]="jugador.club" />
+            </div>
+        </div>
+        <!-- mostrar boton "Volver", para ingresar a la informacion del jugador  -->
+        <div class="button">
+            <button class="btn btn-primary" type="submit" (click)="volverAJugadores()">Volver</button>
+        </div>
+    </div>
 </div>
