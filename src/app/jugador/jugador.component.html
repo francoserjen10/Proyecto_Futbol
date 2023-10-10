@@ -2,7 +2,7 @@
     <div class="title">
         <h1>Jugador</h1>
     </div>
-    <div class="container-player" *ngFor="let jugador of jugador">
+    <div class="container-player" *ngIf="jugadorSeleccionado">
         <!-- <-- Mostrar foto del jugador -->
         <div class="imagen-player">
             <img src="" alt="" />
@@ -10,19 +10,19 @@
         <div class="container-input-player">
             <div>
                 <!-- Mostrar el nombre -->
-                <input type="text" [(ngModel)]="jugador.nombre" />
+                <input type="text" [(ngModel)]="jugadorSeleccionado.nombre" />
             </div>
             <div>
                 <!-- mostrar el apellido -->
-                <input type="text" [(ngModel)]="jugador.apellido" />
+                <input type="text" [(ngModel)]="jugadorSeleccionado.apellido" />
             </div>
             <div>
                 <!-- mostrar la fecha de nacimiento -->
-                <input type="text" [(ngModel)]="jugador.fechaDeNacimiento" />
+                <input type="text" [(ngModel)]="jugadorSeleccionado.fechaDeNacimiento" />
             </div>
             <div>
                 <!-- Mostrar el club -->
-                <input type="text" [(ngModel)]="jugador.club" />
+                <input type="text" [(ngModel)]="jugadorSeleccionado.club" />
             </div>
         </div>
         <!-- mostrar boton "Volver", para ingresar a la informacion del jugador  -->

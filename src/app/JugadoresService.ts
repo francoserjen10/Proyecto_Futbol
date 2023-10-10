@@ -12,7 +12,7 @@ export class JugadoresService {
   constructor() { }
 
   //Metodo donde le pasamos por parametro un jugador de tipo Jugador(interface) y guardamos ese jugador creado en el atributo jugadores
-  agregarJugador(jugador : Jugador) {
+  agregarJugador(jugador: Jugador) {
     this.jugadores.push(jugador);
   };
 
@@ -20,4 +20,10 @@ export class JugadoresService {
   obtenerJugadores() {
     return this.jugadores;
   }
+
+  //Metodo donde se va a ubicar al jugador con su id correspondiente dentro del arreglo de jugadores
+  encontrarJugadorPorId(indice: number) {
+    let jugador: Jugador = this.jugadores[indice];
+    return jugador;
+  };
 }

@@ -14,7 +14,7 @@ const routes: Routes = [
   { path: 'calendarioDeAsistencia', component: CalendarioDeAsistenciaComponent },
   { path: 'entrenamiento', component: EntrenamientoComponent },
   { path: 'contabilidad', component: ContabilidadComponent },
-  { path: 'jugador', component: JugadorComponent },
+  { path: 'jugador/:id', component: JugadorComponent },
   { path: 'nuevo-jugador', component: NuevoJugadorComponent}
 ];
 

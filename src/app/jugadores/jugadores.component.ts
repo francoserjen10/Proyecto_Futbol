@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { Jugador } from '../interfaces/Jugador';
 import { JugadoresService } from '../JugadoresService';
 
@@ -23,16 +22,15 @@ export class JugadoresComponent implements OnInit {
   ];
 
   // constructor
-  public constructor(private router: Router, private jugadoresService: JugadoresService) { }
+  public constructor(private jugadoresService: JugadoresService) { }
 
-  // Metodo nfOnInit donde va el codigo que quiero que se ejecute cuando el componente se inicialize
+  // Metodo ngOnInit donde va el codigo que quiero que se ejecute cuando el componente se inicialize
   ngOnInit(): void {
-    //Traigo todos los jugadores almacenados y los guardo en jugadores
-    this.jugadores = this.jugadoresService.obtenerJugadores();
+    this.extraerJugadores();
   };
 
-  // Metodo donde se ejecuta cuando se hace click en el boton e ingresa al componente Jugador
-  ingresarAJugador() {
-    this.router.navigate(['/jugador'])
+  //Traigo todos los jugadores almacenados y los guardo en jugadores
+  extraerJugadores() {
+    this.jugadores = this.jugadoresService.obtenerJugadores();
   };
 }
