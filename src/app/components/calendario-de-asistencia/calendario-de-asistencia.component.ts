@@ -125,7 +125,7 @@ export class CalendarioDeAsistenciaComponent implements OnInit {
       time: "",
       description: "",
       id: currentId
-    };
+    }; 
     //Oculto el formulario
     this.showForm = false;
   }
