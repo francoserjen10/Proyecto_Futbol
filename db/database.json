@@ -7,6 +7,14 @@
       "fechaDeNacimiento": "1992-09-11",
       "club": "Facha fc",
       "id": 98
+    },
+    {
+      "urlImagen": "",
+      "nombre": "Luciano ",
+      "apellido": "Serjen",
+      "fechaDeNacimiento": "2003-06-16",
+      "club": "Barrio Ceco ",
+      "id": 99
     }
   ],
   "eventos": []
