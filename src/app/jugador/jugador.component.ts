@@ -1,33 +1,40 @@
 import { Component, OnInit } from '@angular/core';
-import { JugadoresService } from '../JugadoresService';
 import { Jugador } from '../interfaces/Jugador';
 import { ActivatedRoute, Router } from '@angular/router';
+import { JugadorService } from '../services/jugador.service';
 
 @Component({
   selector: 'app-jugador',
   templateUrl: './jugador.component.html',
-  styleUrls: ['./jugador.component.css']
+  styleUrls: ['./jugador.component.css'],
 })
 export class JugadorComponent implements OnInit {
-
   //Atributo donde se almacena el jugador seleccionado con el id correspondiente
   jugadorSeleccionado: Jugador | undefined;
 
   //atributo indice para recibir los jugadores con su id
-  indice:number = 0;
+  indice: number = 0;
 
   //constructor
-  constructor(private jugadorService: JugadoresService, private router: Router, private route:ActivatedRoute) { }
+  constructor(
+    private jugadorService: JugadorService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
   //Metodo que se ejecuta despues del constructor
   ngOnInit() {
-    this.almacenamientoDeIdJugadores();
-    this.recibirJugador();
+    // this.almacenamientoDeIdJugadores();
+    this.recibirJugador(this.route.snapshot.params['id']);
   }
 
   //Metodo que llama al servicio para obtener el jugador con su id y almacenarlo en jugadorSeleccionado
-  recibirJugador() {
-    this.jugadorSeleccionado = this.jugadorService.encontrarJugadorPorId(this.indice);
+  recibirJugador(jugadorId: number) {
+    // this.jugadorSeleccionado = this.jugadorService.encontrarJugadorPorId(this.indice);
+    this.jugadorService.getJugadorById(jugadorId).subscribe((jugador) => {
+      this.jugadorSeleccionado = jugador;
+    
+    });
   }
 
   //Metodo que se aplical al boton "Volver", donde escucha el evento click y actua volviendo al componente jugadores

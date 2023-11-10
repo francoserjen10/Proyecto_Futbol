@@ -11,6 +11,7 @@ import { EntrenamientoComponent } from './entrenamiento/entrenamiento.component'
 import { ContabilidadComponent } from './contabilidad/contabilidad.component';
 import { HomeComponent } from './home/home.component';
 import { NuevoJugadorComponent } from './nuevo-jugador/nuevo-jugador.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { NuevoJugadorComponent } from './nuevo-jugador/nuevo-jugador.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
