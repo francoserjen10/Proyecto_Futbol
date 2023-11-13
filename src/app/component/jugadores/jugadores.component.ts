@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Jugador } from '../interfaces/Jugador';
-import { JugadorService } from '../services/jugador.service';
+import { Jugador } from 'src/app/interfaces/Jugador';
+import { JugadorService } from 'src/app/services/jugador.service';
 import { take } from 'rxjs';
 
 @Component({

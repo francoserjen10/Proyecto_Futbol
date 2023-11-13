@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Jugador } from '../interfaces/Jugador';
+import { Jugador } from 'src/app/interfaces/Jugador';
 import { ActivatedRoute, Router } from '@angular/router';
-import { JugadorService } from '../services/jugador.service';
+import { JugadorService } from 'src/app/services/jugador.service';
 
 @Component({
   selector: 'app-jugador',
