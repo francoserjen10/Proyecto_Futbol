@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { HomeComponent } from './home/home.component';
-import { JugadoresComponent } from './jugadores/jugadores.component';
-import { CalendarioDeAsistenciaComponent } from './calendario-de-asistencia/calendario-de-asistencia.component';
-import { EntrenamientoComponent } from './entrenamiento/entrenamiento.component';
-import { ContabilidadComponent } from './contabilidad/contabilidad.component';
-import { JugadorComponent } from './jugador/jugador.component';
-import { NuevoJugadorComponent } from './nuevo-jugador/nuevo-jugador.component';
+import { HomeComponent } from './component/home/home.component';
+import { JugadoresComponent } from './component/jugadores/jugadores.component';
+import { CalendarioDeAsistenciaComponent } from './component/calendario-de-asistencia/calendario-de-asistencia.component';
+import { EntrenamientoComponent } from './component/entrenamiento/entrenamiento.component';
+import { ContabilidadComponent } from './component/contabilidad/contabilidad.component';
+import { JugadorComponent } from './component/jugador/jugador.component';
+import { NuevoJugadorComponent } from './component/nuevo-jugador/nuevo-jugador.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
