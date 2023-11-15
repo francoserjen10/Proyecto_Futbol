@@ -40,7 +40,7 @@ export class JugadoresComponent implements OnInit {
 
   public deleteJugador(jugadorId: number): void {
     this.jugadorService.deleteJugadorById(jugadorId).subscribe(() => {
-      alert('Se borró al jugador con éxito')
+      alert('Se borró al jugador con éxito');
       this.extraerJugadores();
     });
   }

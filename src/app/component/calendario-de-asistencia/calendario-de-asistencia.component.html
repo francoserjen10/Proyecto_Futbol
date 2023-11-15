@@ -15,10 +15,38 @@
         <ol>
             <li *ngFor="let day of week" class="day-name">{{day | slice:0:3}}</li>
 
-            <li [style.gridColumnStart]="first ? day?.indexWeek : 'auto'"
-                *ngFor="let day of monthSelect;let first = first">
-                <span>{{day?.value}}</span>
+            <li (click)="showEventForm(i)" [style.gridColumnStart]="first ? day?.indexWeek : 'auto'"
+                *ngFor="let day of monthSelect;let first = first; index as i">
+                <div>
+                    <div>
+                        <p>{{[day?.value]}}</p>
+                    </div>
+                    <div *ngIf="day.events && day.events.length > 0">
+                        <div *ngFor="let event of day.events">
+                            <p>Hora: {{event.time}}</p>
+                            <p>Tarea: {{event.description}}</p>
+                            <button type="button" (click)="deleteEventById(event.id)">Borrar</button>
+                            <!-- <button type="button" (click)="showEventToModifyId(event)">Modificar</button> -->
+                        </div>
+                    </div>
+                </div>
             </li>
         </ol>
+    </div>
+    <div *ngIf="showForm">
+        <form (submit)="saveEvent(event)" id="formEvent">
+            <div class="form-group">
+                <label for="exampleInputEvent">Horario del evento</label>
+                <input type="time" class="form-control" id="exampleInputEvent" name="time" aria-describedby="textHelp"
+                    placeholder="Enter evento" [(ngModel)]="event.time">
+                <small id="textHelp" class="form-text text-muted">Ingrese un horario</small>
+            </div>
+            <div class="form-group">
+                <label for="exampleInputDescription">Descripcion</label>
+                <textarea type="description" class="form-control" id="exampleInputDescription" name="description"
+                    placeholder="Descripcion" [(ngModel)]="event.description"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Aceptar</button>
+        </form>
     </div>
 </div>

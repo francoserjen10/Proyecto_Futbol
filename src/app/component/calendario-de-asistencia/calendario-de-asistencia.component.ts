@@ -1,8 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
+import { take } from 'rxjs';
+import { Event } from 'src/app/interfaces/event';
+import { EventoService } from 'src/app/services/evento.service';
 
 @Component({
-  selector: 'app-calendario-de-asistencia',
+  selector: 'AppComponent',
   templateUrl: './calendario-de-asistencia.component.html',
   styleUrls: ['./calendario-de-asistencia.component.css']
 })
@@ -18,17 +22,33 @@ export class CalendarioDeAsistenciaComponent implements OnInit {
     "Sabado",
     "Domingo"
   ];
-
-  monthSelect: any[] = [];
+  //Inicializo la interface
+  event: Event = {
+    time: '',
+    description: '',
+    id: 0,
+    day: ''
+  } ;
+  //Arreglo de meses
+  monthSelect: any = [];
+  //Dias del mes seleccionado
+  daySelect: string = "";
+  //Dia de inicio del mes seleccionado
   dateSelect: any;
+  //Variable para poder mostrar el formulario cuando se haga click en un dia especifico
+  showForm: boolean = false;
+  //
+  idOfEvent: Event;
+  //Arreglo de eventos
+  events: Event[];
 
-  constructor() { }
+  constructor(private eventService: EventoService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.getDayFromDate(2, 2023);
+    this.getAllEvents();
   }
-
-  //"Obtener el dia desde la fecha". Es el metodo principal del calendario
+  //Obtener el dia desde la fecha". Es el metodo principal del calendario
   getDayFromDate(month: any, year: any) {
     //Constante donde llamo a moment y a utc (Sirve para declarar un horario estandar)
     //Comienzo del mes
@@ -39,7 +59,7 @@ export class CalendarioDeAsistenciaComponent implements OnInit {
     const endDate = startDate.clone().endOf("month");
     this.dateSelect = startDate;
 
-    //.diff es para que nos trae (en dias, horas, mitutos, dependiendo del argumento que le pasemos) los dias que existen entre la fecha de inicio (startDate) y la fecha final (endDate).
+    //.diff es para que nos traiga (en dias, horas, mitutos, dependiendo del argumento que le pasemos) los dias que existen entre la fecha de inicio (startDate) y la fecha final (endDate).
     //Le pasamos el valor booleano "true", para que nos de un valor decimal mas exacto.
     const diffDays = endDate.diff(startDate, 'days', true);
     //Constante donde redondea el numero traido desde "diffDays"
@@ -56,13 +76,15 @@ export class CalendarioDeAsistenciaComponent implements OnInit {
         //El valor de a (los dias)
         value: a,
         //El isoWeekday nos trae el indice que representa el dia "a" en la semana
-        indexWeek: dayObject.isoWeekday()
+        indexWeek: dayObject.isoWeekday(),
+        //Arreglo de evento vacio
+        events: []
       };
     });
     //Agregamos todo el arreglo de dias "arrayDays"a "monthSelect"
     this.monthSelect = arrayDays;
   }
-
+  //Metodo que le da funcionalidad a los botones donde selecciono los meses
   changeMonth(flag: number) {
     if (flag < 0) {
       //constante donde substraemos un mes (quitamos un mes para darle funcionalidad al boton)
@@ -75,5 +97,83 @@ export class CalendarioDeAsistenciaComponent implements OnInit {
       //llamo al metodo "getDayFromDate", para darle la informacion de la constante "nextDate" con el formato de mes y año
       this.getDayFromDate(nextDate.format("MM"), nextDate.format("YYYY"));
     };
+  }
+
+  //Metodo el cual se llama cuando se hace click en el numero del dia que se requiera. 
+  showEventForm(day: number) {
+    //Dia seleccionado
+    this.daySelect = day.toString();
+    // Mostrar el formulario
+    this.showForm = true;
+  }
+
+  //Creo evento y lo cargo en el calendario
+  // Crud: Crear
+  saveEvent(event: Event) {
+    //Creo nuevo evento para almacenar la informacion de cada evento creado
+    const newEvent: Event = {
+      time: event.time,
+      description: event.description,
+      day: this.daySelect
+    };
+    //Guardo el evento en el dia seleccionado
+    this.monthSelect[this.daySelect].events.push(newEvent);
+
+    //Codigo para la base de datos json (llamo al eventService)
+    this.eventService.createEvento(event).subscribe({
+      next(event) {
+        alert("Se creó el evento exitosamente");
+        this.getAllEvents();
+      },
+    })
+  }
+
+  // Crud: leer
+  getEventById(eventId: number) {
+    this.eventService.getEventoById(eventId).subscribe((event) => {
+      this.event = event;
+    });
+  }
+
+  // Crud: leer
+  getAllEvents() {
+    this.eventService.getAllEvents()
+      .pipe(take(1))
+      .subscribe((events) => {
+        // por cada evento, fijate el día y la hora y asignalo al día del mes q corresponda
+
+        this.monthSelect[this.daySelect].events = events;
+      });
+  }
+  
+  // ---------------------------FALTA--------------------------------------------------------------------------
+  //Crud: Actualizar 
+  // updateEvents(event: Event) {
+  //   this.eventService.updateEvento(event)
+  // }
+  // ---------------------------FALTA--------------------------------------------------------------------------
+
+  //Crud: Actualizar 
+  deleteEventById(id: number) {
+    this.eventService.deleteEventoById(id).subscribe(() => {
+      alert("Se borro el jugador" + id + "exitosamente");
+      this.getAllEvents();
+    })
+  }
+  // -----------------------------------------------------------------------------------------------------
+
+  //Metodo donde limpio el formulario
+  clearForm() {
+    //Variable donde obtiene el valor del ultimo id creado
+    let currentId = this.event.id;
+    //Dejo los elementos del formulario vacios y el id toma el valor del ultimo creado
+    this.event = {
+      time: "",
+      description: "",
+      id: currentId,
+      day: this.daySelect
+    };
+    //Oculto el formulario
+    this.showForm = false;
   }
 }
