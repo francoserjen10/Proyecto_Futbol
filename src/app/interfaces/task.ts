@@ -1,4 +1,4 @@
-export interface Event {
+export interface Task {
     time: string,
     description: string,
     id?: number,

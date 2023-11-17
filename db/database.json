@@ -17,5 +17,35 @@
       "id": 99
     }
   ],
-  "eventos": []
+  "tareas": [
+    {
+      "time": "23:24",
+      "description": "wfsdfsfd",
+      "id": 5,
+      "day": ""
+    },
+    {
+      "time": "23:24",
+      "description": "wc",
+      "id": 6,
+      "day": ""
+    },
+    {
+      "time": "23:24",
+      "description": "wc",
+      "id": 7,
+      "day": ""
+    },
+    {
+      "time": "23:23",
+      "description": "4324323",
+      "id": 8,
+      "day": ""
+    },
+    {
+      "time": "23:04",
+      "description": "234",
+      "id": 10
+    }
+  ]
 }

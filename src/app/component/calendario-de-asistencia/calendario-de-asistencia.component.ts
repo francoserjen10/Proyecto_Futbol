@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
 import { take } from 'rxjs';
-import { Event } from 'src/app/interfaces/event';
-import { EventoService } from 'src/app/services/evento.service';
+import { Task } from 'src/app/interfaces/task';
+import { TareaService } from 'src/app/services/tarea.service';
 
 @Component({
   selector: 'AppComponent',
@@ -23,12 +22,7 @@ export class CalendarioDeAsistenciaComponent implements OnInit {
     "Domingo"
   ];
   //Inicializo la interface
-  event: Event = {
-    time: '',
-    description: '',
-    id: 0,
-    day: ''
-  } ;
+  task = {} as Task;
   //Arreglo de meses
   monthSelect: any = [];
   //Dias del mes seleccionado
@@ -38,15 +32,15 @@ export class CalendarioDeAsistenciaComponent implements OnInit {
   //Variable para poder mostrar el formulario cuando se haga click en un dia especifico
   showForm: boolean = false;
   //
-  idOfEvent: Event;
+  idOfTask: Task;
   //Arreglo de eventos
-  events: Event[];
+  tasks: Task[];
 
-  constructor(private eventService: EventoService, private route: ActivatedRoute) { }
+  constructor(private tasksService: TareaService) { }
 
   ngOnInit(): void {
     this.getDayFromDate(2, 2023);
-    this.getAllEvents();
+    this.getAllTaskInCalendar();
   }
   //Obtener el dia desde la fecha". Es el metodo principal del calendario
   getDayFromDate(month: any, year: any) {
@@ -77,8 +71,8 @@ export class CalendarioDeAsistenciaComponent implements OnInit {
         value: a,
         //El isoWeekday nos trae el indice que representa el dia "a" en la semana
         indexWeek: dayObject.isoWeekday(),
-        //Arreglo de evento vacio
-        events: []
+        //Arreglo de tareas vacio
+        tasks: []
       };
     });
     //Agregamos todo el arreglo de dias "arrayDays"a "monthSelect"
@@ -99,53 +93,57 @@ export class CalendarioDeAsistenciaComponent implements OnInit {
     };
   }
 
-  //Metodo el cual se llama cuando se hace click en el numero del dia que se requiera. 
-  showEventForm(day: number) {
+  //Metodo el cual se llama cuando se hace click en el numero del dia que se requiera y le sumo 1 ya que todo arreglo arranca en 0.
+  showTaskForm(day: number) {
     //Dia seleccionado
-    this.daySelect = day.toString();
+    this.daySelect = day.toString() + 1;
     // Mostrar el formulario
     this.showForm = true;
   }
 
-  //Creo evento y lo cargo en el calendario
+  //Creo tarea y lo cargo en el calendario
   // Crud: Crear
-  saveEvent(event: Event) {
-    //Creo nuevo evento para almacenar la informacion de cada evento creado
-    const newEvent: Event = {
-      time: event.time,
-      description: event.description,
+  saveTask(task: Task) {
+    //Creo nueva tarea para almacenar la informacion de cada tarea creada
+    const newTask: Task = {
+      time: task.time,
+      description: task.description,
       day: this.daySelect
     };
-    //Guardo el evento en el dia seleccionado
-    this.monthSelect[this.daySelect].events.push(newEvent);
+    //Guardo la tarea en el dia seleccionado
+    this.monthSelect[this.daySelect].tasks.push(newTask);
 
-    //Codigo para la base de datos json (llamo al eventService)
-    this.eventService.createEvento(event).subscribe({
-      next(event) {
-        alert("Se creó el evento exitosamente");
-        this.getAllEvents();
+    //Codigo para la base de datos json (llamo al tareaService)
+    this.tasksService.createTask(newTask).subscribe({
+      next: (task) => {
+        alert("Se creó la tarea exitosamente");
+        this.getAllTaskInCalendar();
       },
     })
   }
 
   // Crud: leer
-  getEventById(eventId: number) {
-    this.eventService.getEventoById(eventId).subscribe((event) => {
-      this.event = event;
+  getTasktById(tasktId: number) {
+    this.tasksService.getTaskById(tasktId).subscribe((event) => {
+      this.task = event;
     });
   }
 
   // Crud: leer
-  getAllEvents() {
-    this.eventService.getAllEvents()
+  getAllTaskInCalendar() {
+    this.tasksService.getAllTasks()
       .pipe(take(1))
-      .subscribe((events) => {
-        // por cada evento, fijate el día y la hora y asignalo al día del mes q corresponda
-
-        this.monthSelect[this.daySelect].events = events;
+      .subscribe((tasks) => {
+        // por cada tarea, fijate el día y la hora y asignalo al día del mes q corresponda
+        //Recorrer cada tarea y mostrar esas tareas en el dia correspondiente
+        tasks.forEach((task) => {
+          if (task.day === this.daySelect) {
+            this.monthSelect[this.daySelect].tasks.day.push(task.day);
+          }
+        });
       });
   }
-  
+
   // ---------------------------FALTA--------------------------------------------------------------------------
   //Crud: Actualizar 
   // updateEvents(event: Event) {
@@ -154,10 +152,10 @@ export class CalendarioDeAsistenciaComponent implements OnInit {
   // ---------------------------FALTA--------------------------------------------------------------------------
 
   //Crud: Actualizar 
-  deleteEventById(id: number) {
-    this.eventService.deleteEventoById(id).subscribe(() => {
-      alert("Se borro el jugador" + id + "exitosamente");
-      this.getAllEvents();
+  deleteTaskById(id: number) {
+    this.tasksService.deleteTasksById(id).subscribe(() => {
+      alert("Se borro la tarea" + id + "exitosamente");
+      this.getAllTaskInCalendar();
     })
   }
   // -----------------------------------------------------------------------------------------------------
@@ -165,9 +163,9 @@ export class CalendarioDeAsistenciaComponent implements OnInit {
   //Metodo donde limpio el formulario
   clearForm() {
     //Variable donde obtiene el valor del ultimo id creado
-    let currentId = this.event.id;
+    let currentId = this.task.id;
     //Dejo los elementos del formulario vacios y el id toma el valor del ultimo creado
-    this.event = {
+    this.task = {
       time: "",
       description: "",
       id: currentId,

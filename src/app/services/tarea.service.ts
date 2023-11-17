@@ -1,59 +1,59 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CommonService } from './common.service';
-import { Event } from '../interfaces/event';
+import { Task } from '../interfaces/task';
 import { Observable, catchError, retry } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class EventoService {
+export class TareaService {
   constructor(private http: HttpClient, private commonService: CommonService) {}
 
   // crud: create read update delete
 
-  createEvento(evento: Event): Observable<Event> {
+  createTask(tarea: Task): Observable<Task> {
     return this.http
-      .post<Event>(
-        `${this.commonService.apiURL}/eventos`,
-        JSON.stringify(evento),
+      .post<Task>(
+        `${this.commonService.apiURL}/tareas`,
+        JSON.stringify(tarea),
         this.commonService.httpOptions
       )
       .pipe(retry(1), catchError(this.commonService.handleError));
   }
 
-  getEventoById(eventId: number): Observable<Event> {
+  getTaskById(taskId: number): Observable<Task> {
     return this.http
-      .get<Event>(
-        `${this.commonService.apiURL}/eventos/${eventId}`,
+      .get<Task>(
+        `${this.commonService.apiURL}/tareas/${taskId}`,
         this.commonService.httpOptions
       )
       .pipe(retry(1), catchError(this.commonService.handleError));
   }
 
-  getAllEvents(): Observable<Event[]> {
+  getAllTasks(): Observable<Task[]> {
     return this.http
-      .get<Event[]>(
-        `${this.commonService.apiURL}/eventos`,
+      .get<Task[]>(
+        `${this.commonService.apiURL}/tareas`,
         this.commonService.httpOptions
       )
       .pipe(retry(1), catchError(this.commonService.handleError));
   }
 
-  updateEvento(evento: Event) {
+  updateETasks(tarea: Task) {
     return this.http
-      .put<Event>(
-        `${this.commonService.apiURL}/eventos/${evento.id}`,
-        JSON.stringify(evento),
+      .put<Task>(
+        `${this.commonService.apiURL}/tareas/${tarea.id}`,
+        JSON.stringify(tarea),
         this.commonService.httpOptions
       )
       .pipe(retry(1), catchError(this.commonService.handleError));
   }
 
-  deleteEventoById(eventId: number) {
+  deleteTasksById(taskId: number) {
     return this.http
-      .delete<Event>(
-        `${this.commonService.apiURL}/eventos/${eventId}`,
+      .delete<Task>(
+        `${this.commonService.apiURL}/tareas/${taskId}`,
         this.commonService.httpOptions
       )
       .pipe(retry(1), catchError(this.commonService.handleError));
