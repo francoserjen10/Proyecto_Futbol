@@ -1,59 +1,59 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CommonService } from './common.service';
-import { Event } from '../interfaces/event';
+import { Appointment } from '../interfaces/appointment';
 import { Observable, catchError, retry } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class EventoService {
+export class AppointmentService {
   constructor(private http: HttpClient, private commonService: CommonService) {}
 
   // crud: create read update delete
 
-  createEvento(evento: Event): Observable<Event> {
+  createAppointment(appointment: Appointment): Observable<Appointment> {
     return this.http
-      .post<Event>(
-        `${this.commonService.apiURL}/eventos`,
-        JSON.stringify(evento),
+      .post<Appointment>(
+        `${this.commonService.apiURL}/appointment`,
+        JSON.stringify(appointment),
         this.commonService.httpOptions
       )
       .pipe(retry(1), catchError(this.commonService.handleError));
   }
 
-  getEventoById(eventId: number): Observable<Event> {
+  getAppointmentById(appointmentId: number): Observable<Appointment> {
     return this.http
-      .get<Event>(
-        `${this.commonService.apiURL}/eventos/${eventId}`,
+      .get<Appointment>(
+        `${this.commonService.apiURL}/appointment/${appointmentId}`,
         this.commonService.httpOptions
       )
       .pipe(retry(1), catchError(this.commonService.handleError));
   }
 
-  getAllEvents(): Observable<Event[]> {
+  getAllAppointments(): Observable<Appointment[]> {
     return this.http
-      .get<Event[]>(
-        `${this.commonService.apiURL}/eventos`,
+      .get<Appointment[]>(
+        `${this.commonService.apiURL}/appointment`,
         this.commonService.httpOptions
       )
       .pipe(retry(1), catchError(this.commonService.handleError));
   }
 
-  updateEvento(evento: Event) {
+  updateEAppointments(appointment: Appointment) {
     return this.http
-      .put<Event>(
-        `${this.commonService.apiURL}/eventos/${evento.id}`,
-        JSON.stringify(evento),
+      .put<Appointment>(
+        `${this.commonService.apiURL}/appointment/${appointment.id}`,
+        JSON.stringify(appointment),
         this.commonService.httpOptions
       )
       .pipe(retry(1), catchError(this.commonService.handleError));
   }
 
-  deleteEventoById(eventId: number) {
+  deleteAppointmentsById(appointmentId: number) {
     return this.http
-      .delete<Event>(
-        `${this.commonService.apiURL}/eventos/${eventId}`,
+      .delete<Appointment>(
+        `${this.commonService.apiURL}/appointment/${appointmentId}`,
         this.commonService.httpOptions
       )
       .pipe(retry(1), catchError(this.commonService.handleError));
