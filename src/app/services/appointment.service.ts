@@ -1,59 +1,59 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CommonService } from './common.service';
-import { Task } from '../interfaces/task';
+import { Appointment } from '../interfaces/appointment';
 import { Observable, catchError, retry } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class TareaService {
+export class AppointmentService {
   constructor(private http: HttpClient, private commonService: CommonService) {}
 
   // crud: create read update delete
 
-  createTask(tarea: Task): Observable<Task> {
+  createAppointment(appointment: Appointment): Observable<Appointment> {
     return this.http
-      .post<Task>(
-        `${this.commonService.apiURL}/tareas`,
-        JSON.stringify(tarea),
+      .post<Appointment>(
+        `${this.commonService.apiURL}/appointment`,
+        JSON.stringify(appointment),
         this.commonService.httpOptions
       )
       .pipe(retry(1), catchError(this.commonService.handleError));
   }
 
-  getTaskById(taskId: number): Observable<Task> {
+  getAppointmentById(appointmentId: number): Observable<Appointment> {
     return this.http
-      .get<Task>(
-        `${this.commonService.apiURL}/tareas/${taskId}`,
+      .get<Appointment>(
+        `${this.commonService.apiURL}/appointment/${appointmentId}`,
         this.commonService.httpOptions
       )
       .pipe(retry(1), catchError(this.commonService.handleError));
   }
 
-  getAllTasks(): Observable<Task[]> {
+  getAllAppointments(): Observable<Appointment[]> {
     return this.http
-      .get<Task[]>(
-        `${this.commonService.apiURL}/tareas`,
+      .get<Appointment[]>(
+        `${this.commonService.apiURL}/appointment`,
         this.commonService.httpOptions
       )
       .pipe(retry(1), catchError(this.commonService.handleError));
   }
 
-  updateETasks(tarea: Task) {
+  updateEAppointments(appointment: Appointment) {
     return this.http
-      .put<Task>(
-        `${this.commonService.apiURL}/tareas/${tarea.id}`,
-        JSON.stringify(tarea),
+      .put<Appointment>(
+        `${this.commonService.apiURL}/appointment/${appointment.id}`,
+        JSON.stringify(appointment),
         this.commonService.httpOptions
       )
       .pipe(retry(1), catchError(this.commonService.handleError));
   }
 
-  deleteTasksById(taskId: number) {
+  deleteAppointmentsById(appointmentId: number) {
     return this.http
-      .delete<Task>(
-        `${this.commonService.apiURL}/tareas/${taskId}`,
+      .delete<Appointment>(
+        `${this.commonService.apiURL}/appointment/${appointmentId}`,
         this.commonService.httpOptions
       )
       .pipe(retry(1), catchError(this.commonService.handleError));

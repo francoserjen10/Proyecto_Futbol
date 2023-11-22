@@ -1,6 +1,6 @@
-export interface Task {
+export interface Appointment  {
     time: string,
     description: string,
     id?: number,
-    day: string
+    day: number | undefined
 } 
