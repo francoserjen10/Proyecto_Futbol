@@ -2,7 +2,63 @@
     <div class="title">
         <h1>Calendario de asistencia</h1>
     </div>
+
+    <!-- Boton para abrir el modal -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        Crear actividad
+    </button>
+
+    <!-- Calendario -->
     <div>
-       <full-calendar [options]="calendarOptions"></full-calendar>
+        <full-calendar [options]="calendarOptions"></full-calendar>
+    </div>
+
+    <!-- Modal-Formulario -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Actividad</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Bootstrap -->
+                    <div class="mb-3">
+                        <label for="appointmentTitle" class="form-label">Actividad</label>
+                        <input type="text" class="form-control" id="appointmentTitle" placeholder="Ingrese la actividad">
+                      </div>
+
+                      <div class="mb-3">
+                        <label for="appointmentStartDate" class="form-label">Fecha de inicio</label>
+                        <input type="text" class="form-control" id="appointmentStartDate" placeholder="Ingrese fecha de inicio">
+                      </div>
+
+                      <div class="mb-3">
+                        <label for="appointmentStartTime" class="form-label">Horario de inicio</label>
+                        <input type="text" class="form-control" id="appointmentStartTime" placeholder="Ingrese horario de inicio">
+                      </div>
+
+                      <div class="mb-3">
+                        <label for="appointmentEndTime" class="form-label">Horario de finalizacion</label>
+                        <input type="text" class="form-control" id="appointmentEndTime" placeholder="Ingrese horario de finalizacion">
+                      </div>
+
+                      <div class="mb-3">
+                        <label for="appointmentLocation" class="form-label">Lugar</label>
+                        <input type="text" class="form-control" id="appointmentLocation" placeholder="Ingrese lugar de la actividad">
+                      </div>
+
+                      <div class="mb-3">
+                        <label for="players" class="form-label">Asistencia</label>
+                        <input type="text" class="form-control" id="players" placeholder="Jugadores que asistieron">
+                      </div>
+                </div>
+                <!-- Botones -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Cargar Actividad</button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
