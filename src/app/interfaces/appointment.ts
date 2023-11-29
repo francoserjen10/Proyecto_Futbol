@@ -1,6 +1,7 @@
 export interface Appointment  {
-    time: string,
-    description: string,
+    appointmentPlayers: string,
+    appointmentStartDate: string,
+    appointmentStartTime: string,
+    appointmentEndTime: string,
     id?: number,
-    day: number | undefined
 } 
