@@ -22,22 +22,12 @@ export class CalendarComponent {
     appointmentEndTime: ''
   };
 
-  //Almaceno el evento seleccionado
-  selectedAppointment: Appointment;
-  
+  //Metodo para borrar de el calendario y de la base de datos local el appointment seleccionado
   handleEventClick = (info: any) => {
-    //Obtendo el evento seleccionado
-    this.selectedAppointment = {
-      id: info.event.id,
-      appointmentPlayers: info.event.title,
-      //toISOString() = Se usa para formatear un objeto de fecha en una cadena de texto en formato de fecha ISO
-  //   //.split('T')[0] = Y aca se quiere extraer solo la parte de la fecha y asi puede aparecer en el formulario
-      appointmentStartDate: info.event.start.toISOString().split('T')[0],
-      //[1] = accede al segundo elemento del arreglo que es la parte de la hora
-      //.substring(0, 5) = toma los primeros 5 caracteres de la cadena de la hora que en el formato ISO, representa las dos primeras cifras del valor de la hora
-      appointmentStartTime: info.event.start.toISOString().split('T')[1].substring(0, 5),
-      appointmentEndTime: info.event.end.toISOString().split('T')[1].substring(0, 5),
-    }
+    //Le asigno el id del evento seleccionado
+    const appointmentId = info.event.id;
+    //Elimino el appointment
+    this.deleteAppointmentInCalendar(appointmentId);
   }
 
   //Desde aca se obtiene la funcionalidad de la libreria del calendario (Plugins, botones, funcionalidad para correr entre los dias, semanas, meses, años)
@@ -58,7 +48,7 @@ export class CalendarComponent {
     //Arreglo de eventos (appointments). (Los appointments que contiene el calendario)
     events: [],
 
-    // ----------------PARA MOSTRAR PROPIEDADES DE LOS EVENTOS-----------------
+    // ----------------PARA MOSTRAR PROPIEDADES DE LOS APPOINTMENTS-----------------
     // Se declara en true para que aparezca el horario de finalizacion de los appointments
     forceEventDuration: true,
 
@@ -69,8 +59,7 @@ export class CalendarComponent {
     eventDurationEditable: true,
     //Permite editar la hora de inicio de los appointments arrastrandolos
     eventStartEditable: true,
-
-    // ----------------PARA MOSTRAR INFORMACION DE LOS APPOINTMENTS EN CONSOLA-----------------
+    //Se maneja el evento click de los eventos (Se ejecuta el metodo this.handleEventClick)
     eventClick: this.handleEventClick,
   };
 
@@ -84,7 +73,7 @@ export class CalendarComponent {
   // CRUD: "LEER"
   getAllAppointmentInCalendar(): void {
     this.appointmentService.getAllAppointments().subscribe((appointments: Appointment[]) => {
-      const events: EventSourceInput = appointments.map(appointment => ({
+      const meets: EventSourceInput = appointments.map(appointment => ({
         //Se le pasa los datos del nuevo appointment a la informacion del calendario
         title: appointment.appointmentPlayers,
         start: appointment.appointmentStartDate + ' ' + appointment.appointmentStartTime,
@@ -93,12 +82,12 @@ export class CalendarComponent {
         id: appointment.id.toString()
       }));
       // Actualiza los appointments del calendario
-      this.calendarOptions.events = events;
+      this.calendarOptions.events = meets;
     });
   }
 
-  // //Creo tarea y actualizo el calendario
-  // // CRUD: CREAR
+  //Creo tarea y actualizo el calendario
+  // CRUD: CREAR
   createAppointment(appointment: Appointment): void {
     //Tengo un appointment nuevo
     const newAppointment: Appointment = {
@@ -107,45 +96,31 @@ export class CalendarComponent {
       appointmentStartTime: appointment.appointmentStartTime,
       appointmentEndTime: appointment.appointmentEndTime
     };
-    //   // #TODO (opcional): Se puede agregar una validación para saber si el formulario que envió está ok
-    //   //Llamo al servicio
+    // #TODO (opcional): Se puede agregar una validación para saber si el formulario que envió está ok
+    //Llamo al servicio
     this.appointmentService.createAppointment(appointment).subscribe({
       next(appointment) {
-        alert('Se creó el Entrenamiento exitosamente');
+        alert(`Creado exitosamente`);
       },
       error(err) {
         console.error(err);
-        alert('Ocurrió un error al intentar crear el jugEntrenamientoador');
+        alert('Ocurrió un error al intentar crear el appointment');
       },
     });
     //Actualizo la lista de todos los appointments creados
     this.getAllAppointmentInCalendar();
   }
 
-  //------------------------FALTA BORRAR---------------------------
-
-  // // #TODO: Delete
-  // //CRUD: "BORRAR"
-  // deleteAppointmentInCalendar(appointmentId: number): void {
-  //   this.appointmentService.deleteAppointmentsById(appointmentId).subscribe(() => {
-  //     alert('Se elimino el entrenamiento exitosamente');
-  //     // Actualizo la lista de todos los appointments nuevamente
-  //     this.getAllAppointmentInCalendar();
-  //   });
-  // }
-  //----------------------------------------
-
-  // #TODO: Update
-  updateAppointmentsInCalendar(appointment: Appointment) {
-    this.appointmentService.updateEAppointments(appointment).subscribe(() => {
-      alert('Se actualizo el entrenamiento exitosamente');
-      //  Actualizo nuevamente
+  //CRUD: "BORRAR"
+  deleteAppointmentInCalendar(appointmentId: number): void {
+    this.appointmentService.deleteAppointmentsById(appointmentId).subscribe(() => {
+      alert('Se elimino el entrenamiento exitosamente');
+      // Actualizo la lista de todos los appointments nuevamente
       this.getAllAppointmentInCalendar();
-      //  Limpio el formulario
-      this.cleanForm();
-    })
+    });
   }
 
+  //Limpio formulario
   cleanForm() {
     this.appointment = {
       appointmentPlayers: '',
@@ -155,6 +130,7 @@ export class CalendarComponent {
     }
   }
 
+  //Metodo donde creo y limpio el formulario (Hecho así, para mantener metodos lo mas individual posible)
   createAppointmentAndCleanForm(appointment: Appointment) {
     this.createAppointment(appointment);
     this.cleanForm();

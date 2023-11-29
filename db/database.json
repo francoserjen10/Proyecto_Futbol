@@ -43,160 +43,18 @@
   ],
   "appointment": [
     {
-      "time": "23:24",
-      "description": "wfsdfsfd",
-      "id": 5,
-      "day": ""
+      "appointmentPlayers": "453543",
+      "appointmentStartDate": "2023-11-29",
+      "appointmentStartTime": "20:09",
+      "appointmentEndTime": "20:09",
+      "id": 2
     },
     {
-      "time": "23:24",
-      "description": "wc",
-      "id": 6,
-      "day": ""
-    },
-    {
-      "time": "23:24",
-      "description": "wc",
-      "id": 7,
-      "day": ""
-    },
-    {
-      "time": "23:23",
-      "description": "4324323",
-      "id": 8,
-      "day": ""
-    },
-    {
-      "time": "23:04",
-      "description": "234",
-      "id": 10
-    },
-    {
-      "time": "21:12",
-      "description": "12312332",
-      "day": 14,
-      "id": 11
-    },
-    {
-      "time": "12:03",
-      "description": "1332121",
-      "day": 14,
-      "id": 12
-    },
-    {
-      "time": "23:24",
-      "description": "42342",
-      "day": 28,
-      "id": 13
-    },
-    {
-      "time": "11:11",
-      "description": "111111",
-      "day": 28,
-      "id": 14
-    },
-    {
-      "time": "03:21",
-      "description": "132321",
-      "day": 13,
-      "id": 15
-    },
-    {
-      "description": "32131",
-      "day": 28,
-      "id": 16
-    },
-    {
-      "description": "32131",
-      "day": 28,
-      "id": 17
-    },
-    {
-      "time": "13:12",
-      "description": "1231",
-      "day": 6,
-      "id": 18
-    },
-    {
-      "time": "12:12",
-      "description": "32132121",
-      "day": 6,
-      "id": 19
-    },
-    {
-      "day": 27,
-      "id": 20
-    },
-    {
-      "time": "07:34",
-      "description": "jthrgtyhrt",
-      "id": 21
-    },
-    {
-      "time": "05:23",
-      "description": "gsggsgdfgfd",
-      "day": 6,
-      "id": 22
-    },
-    {
-      "time": "05:42",
-      "description": "gfd",
-      "day": 6,
-      "id": 23
-    },
-    {
-      "time": "05:43",
-      "description": "lkjhgf",
-      "day": 6,
-      "id": 24
-    },
-    {
-      "time": "05:43",
-      "description": "lkjhgf",
-      "day": 6,
-      "id": 25
-    },
-    {
-      "time": "06:59",
-      "description": "665565656",
-      "day": 6,
-      "id": 26
-    },
-    {
-      "time": "06:59",
-      "description": "665565656",
-      "day": 7,
-      "id": 27
-    },
-    {
-      "time": "06:59",
-      "description": "665565656",
-      "day": 6,
-      "id": 28
-    },
-    {
-      "time": "23:32",
-      "description": "4234234",
-      "day": 6,
-      "id": 29
-    },
-    {
-      "time": "08:43",
-      "description": "yutrge",
-      "day": 6,
-      "id": 30
-    },
-    {
-      "time": "07:59",
-      "description": "tyrgef",
-      "day": 20,
-      "id": 31
-    },
-    {
-      "time": "23:43",
-      "description": "fwfwfw",
-      "day": 27,
-      "id": 32
+      "appointmentPlayers": "84545",
+      "appointmentStartDate": "2023-11-29",
+      "appointmentStartTime": "20:13",
+      "appointmentEndTime": "20:13",
+      "id": 3
     }
   ]
 }
