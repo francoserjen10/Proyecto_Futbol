@@ -23,10 +23,6 @@
             "styles": [
               "src/styles.css",
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "node_modules/@fullcalendar/core/main.min.css",
-              "node_modules/@fullcalendar/daygrid/main.min.css",
-              "node_modules/@fullcalendar/timegrid/main.min.css",
-              "node_modules/@fullcalendar/list/main.min.css"
             ],
             "scripts": ["node_modules/bootstrap/dist/js/bootstrap.min.js"]
           },
