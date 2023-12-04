@@ -13,6 +13,7 @@ import { HomeComponent } from './component/home/home.component';
 import { NuevoJugadorComponent } from './component/nuevo-jugador/nuevo-jugador.component';
 import { HttpClientModule } from '@angular/common/http';
 import { CalendarComponent } from './component/calendar/calendar.component';
+import { FooterComponent } from './component/footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { CalendarComponent } from './component/calendar/calendar.component';
     ContabilidadComponent,
     HomeComponent,
     NuevoJugadorComponent,
-    CalendarComponent
+    CalendarComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,

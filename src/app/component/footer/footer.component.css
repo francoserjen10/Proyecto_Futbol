@@ -1,0 +1,15 @@
+.containerFooter {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background-color: #F8F6F4;
+    padding: 1em;
+}
+
+.personalInfo {
+    display: flex;
+    width: 100%;
+    /* flex-direction: row; */
+    justify-content: space-around;
+    padding: 20px 0;
+}
