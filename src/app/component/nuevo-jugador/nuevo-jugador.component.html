@@ -4,19 +4,31 @@
     </div>
     <div class="container-info-new-player">
         <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="floatingInput" placeholder="Nombre" [(ngModel)]="nuevoJugador.nombre">
+            <input type="file" class="form-control" id="floatingImage" placeholder="Foto"
+                (change)="capturarFile($event)" [(ngModel)]="nuevoJugador.urlImagen">
+            <label for="floatingImage">Seleccione su Imagen</label>
+        </div>
+        <div class="imgPrevisualizacion">
+            <img [src]="previsualizacion" alt="">
+        </div>
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="floatingName" placeholder="Nombre"
+                [(ngModel)]="nuevoJugador.nombre">
             <label for="floatingInput">Ingrese su nombre</label>
         </div>
         <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="floatingSurname" placeholder="Apellido" [(ngModel)]="nuevoJugador.apellido">
+            <input type="text" class="form-control" id="floatingSurname" placeholder="Apellido"
+                [(ngModel)]="nuevoJugador.apellido">
             <label for="floatingSurname">Ingrese su apellido</label>
         </div>
         <div class="form-floating mb-3">
-            <input type="date" class="form-control" id="floatingBirthdate" placeholder="Fecha de nacimiento" [(ngModel)]="nuevoJugador.fechaDeNacimiento">
+            <input type="date" class="form-control" id="floatingBirthdate" placeholder="Fecha de nacimiento"
+                [(ngModel)]="nuevoJugador.fechaDeNacimiento">
             <label for="floatingBirthdate">Ingrese su fecha de nacimiento</label>
         </div>
         <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="floatingClub" placeholder="Club" [(ngModel)]="nuevoJugador.club">
+            <input type="text" class="form-control" id="floatingClub" placeholder="Club"
+                [(ngModel)]="nuevoJugador.club">
             <label for="floatingClub">Ingrese su club actual</label>
         </div>
     </div>

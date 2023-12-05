@@ -9,14 +9,23 @@ import { Jugador } from '../interfaces/Jugador';
   providedIn: 'root',
 })
 export class JugadorService {
-  constructor(private http: HttpClient, private commonService: CommonService) {}
+  constructor(private http: HttpClient, private commonService: CommonService) { }
 
   // crud: create read update delete
+
+  createImgJugador(): Observable<Jugador[]> {
+    return this.http
+      .post<Jugador[]>(
+        `${this.commonService.apiURL}/players`,
+        this.commonService.httpOptions
+      )
+      .pipe(retry(1), catchError(this.commonService.handleError));
+  }
 
   createJugador(jugador: Jugador): Observable<Jugador> {
     return this.http
       .post<Jugador>(
-        `${this.commonService.apiURL}/jugadores`,
+        `${this.commonService.apiURL}/players`,
         JSON.stringify(jugador),
         this.commonService.httpOptions
       )
@@ -26,7 +35,7 @@ export class JugadorService {
   getJugadorById(jugadorId: number): Observable<Jugador> {
     return this.http
       .get<Jugador>(
-        `${this.commonService.apiURL}/jugadores/${jugadorId}`,
+        `${this.commonService.apiURL}/players/${jugadorId}`,
         this.commonService.httpOptions
       )
       .pipe(retry(1), catchError(this.commonService.handleError));
@@ -35,7 +44,7 @@ export class JugadorService {
   getAllJugadores(): Observable<Jugador[]> {
     return this.http
       .get<Jugador[]>(
-        `${this.commonService.apiURL}/jugadores`,
+        `${this.commonService.apiURL}/players`,
         this.commonService.httpOptions
       )
       .pipe(retry(1), catchError(this.commonService.handleError));
@@ -44,7 +53,7 @@ export class JugadorService {
   updateJugador(jugador: Jugador) {
     return this.http
       .put<Jugador>(
-        `${this.commonService.apiURL}/jugadores/${jugador.id}`,
+        `${this.commonService.apiURL}/players/${jugador.id}`,
         JSON.stringify(jugador),
         this.commonService.httpOptions
       )
@@ -54,7 +63,7 @@ export class JugadorService {
   deleteJugadorById(jugadorId: number) {
     return this.http
       .delete<Jugador>(
-        `${this.commonService.apiURL}/jugadores/${jugadorId}`,
+        `${this.commonService.apiURL}/players/${jugadorId}`,
         this.commonService.httpOptions
       )
       .pipe(retry(1), catchError(this.commonService.handleError));
