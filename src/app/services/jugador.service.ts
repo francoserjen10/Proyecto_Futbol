@@ -9,9 +9,18 @@ import { Jugador } from '../interfaces/Jugador';
   providedIn: 'root',
 })
 export class JugadorService {
-  constructor(private http: HttpClient, private commonService: CommonService) {}
+  constructor(private http: HttpClient, private commonService: CommonService) { }
 
   // crud: create read update delete
+
+  createImgJugador(): Observable<Jugador[]> {
+    return this.http
+      .post<Jugador[]>(
+        `${this.commonService.apiURL}/players`,
+        this.commonService.httpOptions
+      )
+      .pipe(retry(1), catchError(this.commonService.handleError));
+  }
 
   createJugador(jugador: Jugador): Observable<Jugador> {
     return this.http
