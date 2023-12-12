@@ -10,10 +10,8 @@ import { DomSanitizer } from '@angular/platform-browser';
     styleUrls: ['./nuevo-jugador.component.css'],
 })
 export class NuevoJugadorComponent {
-    //Funcion de previsualizacion
-    previsualizacion: string;
     //Funcion donde se van a guardar los archivos seleccionados del input de tipo file
-    archivos: any = [];
+    archivos: File[] = [];
     //Creamos atributo nuevoJugador de tipo Jugador(interface) con valores en "";
     nuevoJugador: Jugador = {
         urlImagen: '',
@@ -22,6 +20,8 @@ export class NuevoJugadorComponent {
         fechaDeNacimiento: '',
         club: '',
     };
+    //Ruta alternativa de las imagenes para que puedan verse 
+    imagesPath = './assets/images/';
 
     //Inyectamos el servicio creado, el Router, DomSanitizier
     constructor(private jugadorService: JugadorService, private router: Router, private sanitizer: DomSanitizer) { }
@@ -41,7 +41,7 @@ export class NuevoJugadorComponent {
         });
         //Al hacer click en el boton "Aceptar", vamos automaticamente al componente jugadores para poder verificar el jugador creado sin la necesidad de tener que navegar manualmente a travez del navbar
         this.router.navigate(['jugadores']);
-    }
+    };
 
     // Metodo creado para reiniciar el formulario una vez completado el mismo
     reiniciarFormulario() {
@@ -52,47 +52,25 @@ export class NuevoJugadorComponent {
             fechaDeNacimiento: '',
             club: '',
         };
-    }
+    };
 
     //Metodo que captura la imagen del input de tipo file
-    capturarFile(event) {
+    capturarFile(event: any) {
+        //Obtengo el archivo seleccionado por el usuario
         const archivoCapturado = event.target.files[0];
-        this.extraerBase64(archivoCapturado).then((imagen: any) => {
-            this.previsualizacion = imagen.base
-            console.log(imagen);
-        })
-        this.archivos.push(archivoCapturado)
-    }
-
-    //Metodoque se utiliza para representar una imagen como una cadena de texto, para poder meterla en el documento HTML o enviada al servidor.
-    extraerBase64 = async ($event: any) => new Promise((resolve, reject) => {
-        try {
-            const unsafeImg = window.URL.createObjectURL($event);
-            const image = this.sanitizer.bypassSecurityTrustUrl(unsafeImg);
-            const reader = new FileReader();
-            reader.readAsDataURL($event);
-            reader.onload = () => {
-                resolve({
-                    base: reader.result
-                });
-            };
-            reader.onerror = error => {
-                resolve({
-                    base: null
-                });
-            };
-
-        } catch (error) {
-            return null;
-        };
-    });
+        //Lo guardo en archivos
+        this.archivos.push(archivoCapturado);
+        //Obtengo solamente el nombre del archivo para no tener fakePath en la url
+        const nombreImagen = archivoCapturado.name;
+        //Guardo el nombre de ese archivo en la url del jugador
+        this.nuevoJugador.urlImagen = nombreImagen;
+    };
 
     //Metodo donde se va a llamar cuando se aprete el boton de subir archivo del input de tipo file
     subirArchivo() {
         try {
             const formularioDeDatos = new FormData();
             this.archivos.forEach(archivo => {
-                console.log(archivo);
                 formularioDeDatos.append('files', archivo)
             });
             this.jugadorService.createImgJugador().subscribe(res => {
@@ -102,11 +80,5 @@ export class NuevoJugadorComponent {
         } catch (error) {
             console.log('ERROR', error);
         }
-    };
-
-    //Metodo donde se llama a crear Jugador y a subir Archivo
-    creaJugadorConImagen() {
-        this.agregarJugadores();
-        this.subirArchivo();
     };
 }
