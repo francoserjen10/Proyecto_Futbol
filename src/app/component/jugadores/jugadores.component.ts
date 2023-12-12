@@ -19,9 +19,11 @@ export class JugadoresComponent implements OnInit {
       club: '',
     },
   ];
+  //Ruta alternativa de las imagenes para que puedan verse 
+  imagesPath = '../assets/images/';
 
   // constructor
-  constructor(private jugadorService: JugadorService) {}
+  constructor(private jugadorService: JugadorService) { }
 
   // Metodo ngOnInit donde va el codigo que quiero que se ejecute cuando el componente se inicialize
   ngOnInit(): void {
@@ -38,6 +40,7 @@ export class JugadoresComponent implements OnInit {
       });
   }
 
+  //Eliminar Jugadores
   public deleteJugador(jugadorId: number): void {
     this.jugadorService.deleteJugadorById(jugadorId).subscribe(() => {
       alert('Se borró al jugador con éxito');

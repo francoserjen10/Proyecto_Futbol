@@ -4,26 +4,26 @@
     </div>
 
     <div class="container-player" *ngFor="let jugador of jugadores">
-        <!-- <-- Mostrar foto del jugador -->
-        <div class="imagen-player">
-            <img src="" alt="" />
-        </div>
         <div class="container-input-player">
+            <div>
+                <!-- Mostrar la foto -->
+                <img [src]="imagesPath + jugador.urlImagen" alt="{{jugador.nombre}} {{jugador.apellido}}">
+            </div>
             <div>
                 <!-- Mostrar el nombre -->
                 <input type="text" [(ngModel)]="jugador.nombre" readonly />
             </div>
             <div>
                 <!-- mostrar el apellido -->
-                <input type="text" [(ngModel)]="jugador.apellido" readonly/>
+                <input type="text" [(ngModel)]="jugador.apellido" readonly />
             </div>
             <div>
                 <!-- mostrar la fecha de nacimiento -->
-                <input type="text" [(ngModel)]="jugador.fechaDeNacimiento" readonly/>
+                <input type="text" [(ngModel)]="jugador.fechaDeNacimiento" readonly />
             </div>
             <div>
                 <!-- Mostrar el club -->
-                <input type="text" [(ngModel)]="jugador.club" readonly/>
+                <input type="text" [(ngModel)]="jugador.club" readonly />
             </div>
         </div>
         <!-- mostrar boton "Entrar", para ingresar a la informacion del jugador  -->
