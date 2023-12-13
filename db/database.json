@@ -1,44 +1,28 @@
 {
   "players": [
     {
-      "urlImagen": "",
-      "nombre": "Franco",
-      "apellido": "Sergen",
-      "fechaDeNacimiento": "1992-09-11",
-      "club": "Facha fc",
-      "id": 98
+      "urlImagen": "imagen1.jpg",
+      "nombre": "Benjamin",
+      "apellido": "Schuft",
+      "fechaDeNacimiento": "2016-11-30",
+      "club": "Algoritmos fc",
+      "id": 1
     },
     {
-      "urlImagen": "",
-      "nombre": "Luciano ",
-      "apellido": "Serjen",
-      "fechaDeNacimiento": "2003-06-16",
-      "club": "Barrio Ceco ",
-      "id": 99
+      "urlImagen": "imagen1.jpg",
+      "nombre": "Benja",
+      "apellido": "Min",
+      "fechaDeNacimiento": "8787-07-08",
+      "club": "D,SO,A",
+      "id": 2
     },
     {
-      "urlImagen": "",
-      "nombre": "f4wfwefwe",
-      "apellido": "fwfewf",
+      "urlImagen": "imagen1.jpg",
+      "nombre": "Benjamin",
+      "apellido": "Schuft",
       "fechaDeNacimiento": "",
-      "club": "fwefwe",
-      "id": 100
-    },
-    {
-      "urlImagen": "",
-      "nombre": "",
-      "apellido": "",
-      "fechaDeNacimiento": "",
-      "club": "",
-      "id": 101
-    },
-    {
-      "urlImagen": "",
-      "nombre": "Soy franc",
-      "apellido": "Serjen",
-      "fechaDeNacimiento": "2222-01-04",
-      "club": "Buenos aires",
-      "id": 102
+      "club": "Algoritmos 22 fc",
+      "id": 3
     }
   ],
   "appointment": [
