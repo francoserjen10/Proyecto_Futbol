@@ -58,12 +58,9 @@ export class NuevoJugadorComponent {
     capturarFile(event: any) {
         //Obtengo el archivo seleccionado por el usuario
         const archivoCapturado = event.target.files[0];
-        //Lo guardo en archivos
-        this.archivos.push(archivoCapturado);
-        //Obtengo solamente el nombre del archivo para no tener fakePath en la url
-        const nombreImagen = archivoCapturado.name;
-        //Guardo el nombre de ese archivo en la url del jugador
-        this.nuevoJugador.urlImagen = nombreImagen;
+        if (archivoCapturado) {
+            this.nuevoJugador.urlImagen = archivoCapturado.name;
+        }
     };
 
     //Metodo donde se va a llamar cuando se aprete el boton de subir archivo del input de tipo file
