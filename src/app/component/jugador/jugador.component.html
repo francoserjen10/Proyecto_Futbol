@@ -9,6 +9,11 @@
         </div>
         <div class="container-input-player">
             <div>
+                <!-- Mostrar la foto -->
+                <img [src]="imagesPath + jugadorSeleccionado.urlImagen"
+                    alt="{{jugadorSeleccionado.nombre}} {{jugadorSeleccionado.apellido}}">
+            </div>
+            <div>
                 <!-- Mostrar el nombre -->
                 <input type="text" [(ngModel)]="jugadorSeleccionado.nombre" />
             </div>
