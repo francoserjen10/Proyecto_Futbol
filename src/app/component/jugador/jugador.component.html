@@ -33,6 +33,56 @@
         <!-- mostrar boton "Volver", para ingresar a la informacion del jugador  -->
         <div class="button">
             <button class="btn btn-primary" type="submit" (click)="volverAJugadores()">Volver</button>
+            <!-- Boton para abrir el modal -->
+            <button class="btn btn-primary" type="button" data-bs-toggle="modal"
+                data-bs-target="#modificationModal">Modificar Jugador</button>
+        </div>
+    </div>
+
+    <!-- Modal-Formulario -->
+    <div class="modal fade" id="modificationModal" tabindex="-1" aria-labelledby="modificationModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form (submit)="modifyPlayer(jugador)">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="modificationModalLabel">Actividad</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Bootstrap -->
+                        <div class="mb-3">
+                            <label for="nombre" class="form-label">Ingrese su nombre</label>
+                            <input type="text" class="form-control" id="nombre" name="input 1"
+                                [(ngModel)]="jugadorSeleccionado.nombre">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="apellido" class="form-label">Ingrese su apellido</label>
+                            <input type="text" class="form-control" id="apellido" name="input 2"
+                                [(ngModel)]="jugadorSeleccionado.apellido">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="fechaDeNacimiento" class="form-label">Ingrese su fecha de
+                                nacimiento</label>
+                            <input type="date" class="form-control" id="fechaDeNacimiento"
+                                name="input 3" [(ngModel)]="jugadorSeleccionado.fechaDeNacimiento">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="club" class="form-label">Ingrese su club actual</label>
+                            <input type="text" class="form-control" id="club" name="input 4"
+                                [(ngModel)]="jugadorSeleccionado.club">
+                        </div>
+                    </div>
+                    <!-- Botones -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-primary">Modificar Jugador</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
