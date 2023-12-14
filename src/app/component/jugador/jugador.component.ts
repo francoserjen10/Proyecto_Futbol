@@ -11,16 +11,17 @@ import { JugadorService } from 'src/app/services/jugador.service';
 export class JugadorComponent implements OnInit {
   //Atributo donde se almacena el jugador seleccionado con el id correspondiente
   jugadorSeleccionado: Jugador | undefined;
-
   //atributo indice para recibir los jugadores con su id
   indice: number = 0;
+  //Ruta alternativa de las imagenes para que puedan verse 
+  imagesPath = '../assets/images/';
 
   //constructor
   constructor(
     private jugadorService: JugadorService,
     private router: Router,
     private route: ActivatedRoute
-  ) {}
+  ) { }
 
   //Metodo que se ejecuta despues del constructor
   ngOnInit() {
@@ -33,7 +34,7 @@ export class JugadorComponent implements OnInit {
     // this.jugadorSeleccionado = this.jugadorService.encontrarJugadorPorId(this.indice);
     this.jugadorService.getJugadorById(jugadorId).subscribe((jugador) => {
       this.jugadorSeleccionado = jugador;
-    
+
     });
   }
 
