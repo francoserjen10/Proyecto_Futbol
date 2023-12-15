@@ -9,8 +9,14 @@ import { JugadorService } from 'src/app/services/jugador.service';
   styleUrls: ['./jugador.component.css'],
 })
 export class JugadorComponent implements OnInit {
-  //Atributo donde se almacena el jugador seleccionado con el id correspondiente
-  jugadorSeleccionado: Jugador | undefined;
+  //Atributo donde se inicializa el jugador seleccionado y se almacena el jugador seleccionado con el id correspondiente
+  jugadorSeleccionado: Jugador = {
+    urlImagen: '',
+    nombre: '',
+    apellido: '',
+    fechaDeNacimiento: '',
+    club: ''
+  };
   //atributo indice para recibir los jugadores con su id
   indice: number = 0;
   //Ruta alternativa de las imagenes para que puedan verse 
@@ -46,5 +52,15 @@ export class JugadorComponent implements OnInit {
   //Metodo que rescata los id de los jugadores creados que se encuentran en la URL
   almacenamientoDeIdJugadores() {
     this.indice = this.route.snapshot.params['id'];
+  }
+
+  //Metodo que se ejecuta al hacer click en el boton modificar. abre un modal con un formulario para editar el jugador
+  updatePlayer(jugador: Jugador) {
+    //Llamo al servicio
+    if (this.jugadorSeleccionado) {
+      this.jugadorService.updateJugador(this.jugadorSeleccionado).subscribe(jugador => {
+        alert(`Se actualizo el jugador ${jugador} exitosamente`);
+      })
+    }
   }
 }
