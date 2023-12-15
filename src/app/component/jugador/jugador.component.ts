@@ -9,16 +9,14 @@ import { JugadorService } from 'src/app/services/jugador.service';
   styleUrls: ['./jugador.component.css'],
 })
 export class JugadorComponent implements OnInit {
-  //Inicializo a jugador
-  jugador: Jugador = {
-    urlImagen: undefined,
+  //Atributo donde se inicializa el jugador seleccionado y se almacena el jugador seleccionado con el id correspondiente
+  jugadorSeleccionado: Jugador = {
+    urlImagen: '',
     nombre: '',
     apellido: '',
     fechaDeNacimiento: '',
     club: ''
-  }
-  //Atributo donde se almacena el jugador seleccionado con el id correspondiente
-  jugadorSeleccionado: Jugador | undefined;
+  };
   //atributo indice para recibir los jugadores con su id
   indice: number = 0;
   //Ruta alternativa de las imagenes para que puedan verse 
@@ -57,18 +55,12 @@ export class JugadorComponent implements OnInit {
   }
 
   //Metodo que se ejecuta al hacer click en el boton modificar. abre un modal con un formulario para editar el jugador
-  modifyPlayer(jugador: Jugador) {
-    //Obtengo los datos del jugador a modificar
-    const modifiedPlayer: Jugador = {
-      urlImagen: jugador.urlImagen,
-      nombre: jugador.nombre,
-      apellido: jugador.apellido,
-      fechaDeNacimiento: jugador.fechaDeNacimiento,
-      club: jugador.club
+  updatePlayer(jugador: Jugador) {
+    //Llamo al servicio
+    if (this.jugadorSeleccionado) {
+      this.jugadorService.updateJugador(this.jugadorSeleccionado).subscribe(jugador => {
+        alert(`Se actualizo el jugador ${jugador} exitosamente`);
+      })
     }
-    //Llamo al servicio para modificar el jugador
-    this.jugadorService.updateJugador(modifiedPlayer).subscribe(() => {
-      alert('Se actualizo el entrenamiento exitosamente');
-    });
   }
 }
