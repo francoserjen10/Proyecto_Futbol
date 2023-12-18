@@ -3,35 +3,39 @@
         <h1>Jugadores</h1>
     </div>
 
-    <div class="container-player" *ngFor="let jugador of jugadores">
-        <div class="container-input-player">
-            <div>
-                <!-- Mostrar la foto -->
-                <img [src]="imagesPath + jugador.urlImagen" alt="{{jugador.nombre}} {{jugador.apellido}}">
+    <!-- if jugadores else no se encontraron jugadores -->
+    <ng-container *ngIf="jugadores">
+        <div class="container-player" *ngFor="let jugador of jugadores">
+            <div class="container-input-player">
+                <div>
+                    <!-- Mostrar la foto -->
+                    <img [src]="jugador.urlImagen" alt="{{jugador.nombre}} {{jugador.apellido}}">
+                </div>
+                <div>
+                    <!-- Mostrar el nombre -->
+                    <input type="text" [(ngModel)]="jugador.nombre" readonly />
+                </div>
+                <div>
+                    <!-- mostrar el apellido -->
+                    <input type="text" [(ngModel)]="jugador.apellido" readonly />
+                </div>
+                <div>
+                    <!-- mostrar la fecha de nacimiento -->
+                    <input type="text" [(ngModel)]="jugador.fechaDeNacimiento" readonly />
+                </div>
+                <div>
+                    <!-- Mostrar el club -->
+                    <input type="text" [(ngModel)]="jugador.club" readonly />
+                </div>
             </div>
-            <div>
-                <!-- Mostrar el nombre -->
-                <input type="text" [(ngModel)]="jugador.nombre" readonly />
-            </div>
-            <div>
-                <!-- mostrar el apellido -->
-                <input type="text" [(ngModel)]="jugador.apellido" readonly />
-            </div>
-            <div>
-                <!-- mostrar la fecha de nacimiento -->
-                <input type="text" [(ngModel)]="jugador.fechaDeNacimiento" readonly />
-            </div>
-            <div>
-                <!-- Mostrar el club -->
-                <input type="text" [(ngModel)]="jugador.club" readonly />
+            <!-- mostrar boton "Entrar", para ingresar a la informacion del jugador  -->
+            <div class="button">
+                <a [routerLink]="['/jugador', jugador.id]">
+                    <button class="btn btn-primary" type="submit">Entrar</button>
+                </a>
+                <button class="btn btn-secondary" type="button" (click)="deleteJugador(jugador.id)">Borrar
+                    Jugador</button>
             </div>
         </div>
-        <!-- mostrar boton "Entrar", para ingresar a la informacion del jugador  -->
-        <div class="button">
-            <a [routerLink]="['/jugador', jugador.id]">
-                <button class="btn btn-primary" type="submit">Entrar</button>
-            </a>
-            <button class="btn btn-secondary" type="button" (click)="deleteJugador(jugador.id)">Borrar Jugador</button>
-        </div>
-    </div>
+    </ng-container>
 </div>
