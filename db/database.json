@@ -48,5 +48,15 @@
       "appointmentEndTime": "20:13",
       "id": 3
     }
+  ],
+  "accounting": [
+    {
+      "date": "2023-12-19",
+      "name": "Franco",
+      "surname": "Serjen",
+      "pay": true,
+      "moneyPay": "$1000",
+      "id": 1
+    }
   ]
 }
