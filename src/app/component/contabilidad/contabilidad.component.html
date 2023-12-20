@@ -2,59 +2,62 @@
     <div class="title">
         <h1>Contabilidad</h1>
     </div>
+    
+    <div class="generalPageContainer">
+        <!-- Boton donde abre el formulario -->
+        <div class="buttonOpenForm">
+            <button type="button" (click)="OpenForm()">Agregar Pago</button>
+        </div>
 
-    <!-- Boton donde abre el formulario -->
-    <div class="buttonOpenForm float-left">
-        <button type="button" (click)="OpenForm()">Agregar Pago</button>
-    </div>
+        <!-- Tabla de registro de pagos -->
+        <table>
+            <!-- Encabezado de la tabla -->
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Pago </th>
+                    <th>Dinero abonado</th>
+                    <th>Accion</th>
+                </tr>
+            </thead>
+            <!-- Cuerpo de la tabla -->
+            <tbody *ngIf="newPlayer">
+                <tr *ngFor="let player of players">
+                    <td>{{ player.date }}</td>
+                    <td>{{ player.name }}</td>
+                    <td>{{ player.surname }}</td>
+                    <td>{{ player.pay ? 'Si' : 'No' }}</td>
+                    <td>{{ player.moneyPay }}</td>
+                    <td>
+                        <button type="button" class="deleteButton"
+                            (click)="deletePlayerPayment(player.id)">Borrar</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
-    <!-- Tabla de registro de pagos -->
-    <table>
-        <!-- Encabezado de la tabla -->
-        <thead>
-            <tr>
-                <th>Fecha</th>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>Pago </th>
-                <th>Dinero abonado</th>
-            </tr>
-        </thead>
-        <!-- Cuerpo de la tabla -->
-        <tbody *ngIf="newPlayer">
-            <tr *ngFor="let player of players">
-                <td>{{ player.date }}</td>
-                <td>{{ player.name }}</td>
-                <td>{{ player.surname }}</td>
-                <td>{{ player.pay ? 'Si' : 'No' }}</td>
-                <td>{{ player.moneyPay }}</td>
+        <div class="formContainer">
+            <!-- Formulario para ingresar la informacion del pago de los jugadores -->
+            <form *ngIf="showForm">
+                <label for="date">Ingrese Fecha</label>
+                <input type="date" id="date" name="date" [(ngModel)]="newPlayer.date">
 
-                <div class="containerButtonDelete">
-                    <button type="button" (click)="deletePlayerPayment(player.id)">Borrar</button>
-                </div>
-            </tr>
-        </tbody>
-    </table>
+                <label for="name">Ingrese su Nombre</label>
+                <input type="text" id="name" name="name" [(ngModel)]="newPlayer.name">
 
-    <div class="formContainer">
-        <!-- Formulario para ingresar la informacion del pago de los jugadores -->
-        <form *ngIf="showForm">
-            <label for="date">Ingrese Fecha</label>
-            <input type="date" id="date" name="date" [(ngModel)]="newPlayer.date">
+                <label for="surname">Ingrese su Apellido</label>
+                <input type="text" id="surname" name="surname" [(ngModel)]="newPlayer.surname">
 
-            <label for="name">Ingrese su Nombre</label>
-            <input type="text" id="name" name="name" [(ngModel)]="newPlayer.name">
+                <label for="pay">Pagó/No pagó</label>
+                <input type="checkbox" id="pay" name="pay" [(ngModel)]="newPlayer.pay">
 
-            <label for="surname">Ingrese su Apellido</label>
-            <input type="text" id="surname" name="surname" [(ngModel)]="newPlayer.surname">
+                <label for="moneyPay">Monto</label>
+                <input type="text" id="moneyPay" name="moneyPay" [(ngModel)]="newPlayer.moneyPay">
 
-            <label for="pay">Pagó/No pagó</label>
-            <input type="checkbox" id="pay" name="pay" [(ngModel)]="newPlayer.pay">
-
-            <label for="moneyPay">Monto</label>
-            <input type="text" id="moneyPay" name="moneyPay" [(ngModel)]="newPlayer.moneyPay">
-
-            <button type="button" (click)="createPlayerPayment()">Agregar</button>
-        </form>
+                <button type="button" (click)="createPlayerPayment()">Agregar</button>
+            </form>
+        </div>
     </div>
 </div>

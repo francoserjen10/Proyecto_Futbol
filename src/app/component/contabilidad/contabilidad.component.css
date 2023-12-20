@@ -1,20 +1,40 @@
-table {
-    text-align: center;
-    table-layout: fixed;
+/* Contenedor general de la pagina */
+.generalPageContainer {
     width: 100%;
-    border-collapse: collapse;
-    border: 3px solid purple;
+    margin: 0 auto;
+    flex-wrap: wrap;
+}
+
+.buttonOpenForm {
+    margin: 10px;
+}
+
+table {
+    width: 100%;
+    border: 3px solid black;
+}
+
+tbody {
+    border: 1px solid black;
+}
+
+tr {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border: 1px solid black;
 }
 
 th,
 td {
-    border: 1px solid black;
     padding: 10px;
-    background-color: aqua;
+    vertical-align: middle;
 }
 
-.deleteButtonContainer {
-    display: flex;
-    align-items: center;
-    height: 50px;
+.deleteButton {
+    padding: 5px 10px;
+    background-color: #ff6961;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
 }
