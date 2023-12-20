@@ -2,7 +2,7 @@
     <div class="title">
         <h1>Contabilidad</h1>
     </div>
-    
+
     <div class="generalPageContainer">
         <!-- Boton donde abre el formulario -->
         <div class="buttonOpenForm">
@@ -38,9 +38,9 @@
             </tbody>
         </table>
 
-        <div class="formContainer">
+        <div class="formContainer" *ngIf="showForm">
             <!-- Formulario para ingresar la informacion del pago de los jugadores -->
-            <form *ngIf="showForm">
+            <form>
                 <label for="date">Ingrese Fecha</label>
                 <input type="date" id="date" name="date" [(ngModel)]="newPlayer.date">
 
