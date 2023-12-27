@@ -1,6 +1,6 @@
 export interface PlayerPayment {
     pay: boolean,
-    moneyPay: number,
+    amount: number,
     date: Date,
     id?: number
 }

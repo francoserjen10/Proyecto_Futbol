@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, retry, catchError } from 'rxjs';
 import { CommonService } from './common.service';
-import { AssistedPlayer } from '../interfaces/assisted-player';
+import { PlayerPayment } from '../interfaces/player-payment';
 
 @Injectable({
   providedIn: 'root'
@@ -13,38 +13,38 @@ export class PlayerPaymentsService {
 
   // crud: create read update delete
 
-  createPlayerPayments(playerPayment: AssistedPlayer): Observable<AssistedPlayer> {
+  createPlayerPayments(playerPayment: PlayerPayment): Observable<PlayerPayment> {
     return this.http
-      .post<AssistedPlayer>(
-        `${this.commonService.apiURL}/accounting`,
+      .post<PlayerPayment>(
+        `${this.commonService.apiURL}/payments`,
         JSON.stringify(playerPayment),
         this.commonService.httpOptions
       )
       .pipe(retry(1), catchError(this.commonService.handleError));
   }
 
-  getPlayerPaymentById(playerPaymentId: number): Observable<AssistedPlayer> {
+  getPlayerPaymentById(playerPaymentId: number): Observable<PlayerPayment> {
     return this.http
-      .get<AssistedPlayer>(
-        `${this.commonService.apiURL}/accounting/${playerPaymentId}`,
+      .get<PlayerPayment>(
+        `${this.commonService.apiURL}/payments/${playerPaymentId}`,
         this.commonService.httpOptions
       )
       .pipe(retry(1), catchError(this.commonService.handleError));
   }
 
-  getAllPlayerPayments(): Observable<AssistedPlayer[]> {
+  getAllPlayerPayments(): Observable<PlayerPayment[]> {
     return this.http
-      .get<AssistedPlayer[]>(
-        `${this.commonService.apiURL}/accounting`,
+      .get<PlayerPayment[]>(
+        `${this.commonService.apiURL}/payments`,
         this.commonService.httpOptions
       )
       .pipe(retry(1), catchError(this.commonService.handleError));
   }
 
-  updatePlayerPayments(playerPayment: AssistedPlayer) {
+  updatePlayerPayments(playerPayment: PlayerPayment) {
     return this.http
-      .put<AssistedPlayer>(
-        `${this.commonService.apiURL}/accounting/${playerPayment.id}`,
+      .put<PlayerPayment>(
+        `${this.commonService.apiURL}/payments/${playerPayment.id}`,
         JSON.stringify(playerPayment),
         this.commonService.httpOptions
       )
@@ -53,8 +53,8 @@ export class PlayerPaymentsService {
 
   deletePlayerPaymentsById(playerPaymentId: number) {
     return this.http
-      .delete<AssistedPlayer>(
-        `${this.commonService.apiURL}/accounting/${playerPaymentId}`,
+      .delete<PlayerPayment>(
+        `${this.commonService.apiURL}/payments/${playerPaymentId}`,
         this.commonService.httpOptions
       )
       .pipe(retry(1), catchError(this.commonService.handleError));

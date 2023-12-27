@@ -49,37 +49,18 @@
       "id": 3
     }
   ],
-  "accounting": [
+  "payments": [
     {
-      "date": "2023-12-20",
+      "pay": true,
+      "amount": "$1000",
+      "id": 1
+    }
+  ],
+  "asisstance": [
+    {
       "name": "Franco",
-      "surname": "Serjen",
-      "pay": true,
-      "moneyPay": "$1000",
-      "id": 2
-    },
-    {
-      "date": "2023-12-20",
-      "name": "Franco",
-      "surname": "Serjen",
-      "pay": true,
-      "moneyPay": "$1000",
-      "id": 3
-    },
-    {
-      "date": "2023-12-20",
-      "name": "Franco sdsacsad",
-      "surname": "Serjen",
-      "pay": true,
-      "moneyPay": "$1000222",
-      "id": 4
-    },
-    {
-      "date": "2023-12-20",
-      "name": "Tom",
-      "surname": "Yerry",
-      "moneyPay": "$0",
-      "id": 5
+      "lastName": "Serjen",
+      "id": 1
     }
   ]
 }

@@ -1,6 +1,6 @@
 export interface AssistedPlayer {
     name: string,
-    surname: string,
+    lastName: string,
     date: Date,
     id?: number
 }
