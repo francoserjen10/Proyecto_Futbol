@@ -2,47 +2,46 @@
     <div class="title">
         <h1>Jugador</h1>
     </div>
-    <div class="container-player" *ngIf="jugadorSeleccionado">
-        <!-- <-- Mostrar foto del jugador -->
-        <div class="imagen-player">
-            <img src="" alt="" />
+
+    <ng-container *ngIf="jugadorSeleccionado">
+        <div class="container-player">
+            <div class="container-input-player">
+                <div>
+                    <!-- Mostrar foto del jugador -->
+                    <img [src]="jugadorSeleccionado.urlImagen"
+                        alt="{{jugadorSeleccionado.nombre}} {{jugadorSeleccionado.apellido}}">
+                </div>
+                <div>
+                    <!-- Mostrar el nombre -->
+                    <input type="text" [(ngModel)]="jugadorSeleccionado.nombre" />
+                </div>
+                <div>
+                    <!-- mostrar el apellido -->
+                    <input type="text" [(ngModel)]="jugadorSeleccionado.apellido" />
+                </div>
+                <div>
+                    <!-- mostrar la fecha de nacimiento -->
+                    <input type="text" [(ngModel)]="jugadorSeleccionado.fechaDeNacimiento" />
+                </div>
+                <div>
+                    <!-- Mostrar el club -->
+                    <input type="text" [(ngModel)]="jugadorSeleccionado.club" />
+                </div>
+            </div>
+            <div class="button">
+                <!-- mostrar boton "Volver", para ingresar a la informacion del jugador  -->
+                <button class="btn btn-primary" type="submit" (click)="volverAJugadores()">Volver</button>
+                <!-- Boton para abrir el modal -->
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Modificar jugador
+                </button>
+            </div>
         </div>
-        <div class="container-input-player">
-            <div>
-                <!-- Mostrar la foto -->
-                <img [src]="imagesPath + jugadorSeleccionado.urlImagen"
-                    alt="{{jugadorSeleccionado.nombre}} {{jugadorSeleccionado.apellido}}">
-            </div>
-            <div>
-                <!-- Mostrar el nombre -->
-                <input type="text" [(ngModel)]="jugadorSeleccionado.nombre" />
-            </div>
-            <div>
-                <!-- mostrar el apellido -->
-                <input type="text" [(ngModel)]="jugadorSeleccionado.apellido" />
-            </div>
-            <div>
-                <!-- mostrar la fecha de nacimiento -->
-                <input type="text" [(ngModel)]="jugadorSeleccionado.fechaDeNacimiento" />
-            </div>
-            <div>
-                <!-- Mostrar el club -->
-                <input type="text" [(ngModel)]="jugadorSeleccionado.club" />
-            </div>
-        </div>
-        <div class="button">
-            <!-- mostrar boton "Volver", para ingresar a la informacion del jugador  -->
-            <button class="btn btn-primary" type="submit" (click)="volverAJugadores()">Volver</button>
-            <!-- Boton para abrir el modal -->
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                Modificar jugador
-            </button>
-        </div>
-    </div>
+    </ng-container>
 
     <!-- Modal-Formulario -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog" *ngIf="jugadorSeleccionado">
             <div class="modal-content">
                 <form (submit)="updatePlayer(jugadorSeleccionado)">
                     <div class="modal-header">

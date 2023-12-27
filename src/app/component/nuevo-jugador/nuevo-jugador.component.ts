@@ -31,7 +31,6 @@ export class NuevoJugadorComponent {
         //Se agrega el jugador creado
         this.jugadorService.createJugador(this.nuevoJugador).subscribe({
             next(player) {
-                console.log('Jugador creado:', player);
                 alert('Se creó el jugador exitosamente');
             },
             error(err) {
@@ -60,22 +59,6 @@ export class NuevoJugadorComponent {
         const archivoCapturado = event.target.files[0];
         if (archivoCapturado) {
             this.nuevoJugador.urlImagen = archivoCapturado.name;
-        }
-    };
-
-    //Metodo donde se va a llamar cuando se aprete el boton de subir archivo del input de tipo file
-    subirArchivo() {
-        try {
-            const formularioDeDatos = new FormData();
-            this.archivos.forEach(archivo => {
-                formularioDeDatos.append('files', archivo)
-            });
-            this.jugadorService.createImgJugador().subscribe(res => {
-                console.log('Respuesta del servidor', res);
-            })
-
-        } catch (error) {
-            console.log('ERROR', error);
         }
     };
 }
