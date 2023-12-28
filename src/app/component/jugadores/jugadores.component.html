@@ -21,9 +21,9 @@
                 <!-- mostrar boton "Entrar", para ingresar a la informacion del jugador  -->
                 <div class="button">
                     <a [routerLink]="['/jugador', jugador.id]">
-                        <button class="btn btn-primary" type="submit">Entrar</button>
+                        <button class="btn btn-info" type="submit">Entrar</button>
                     </a>
-                    <button class="btn btn-secondary" type="button" (click)="deleteJugador(jugador.id)">Borrar
+                    <button class="btn btn-danger" type="button" (click)="deleteJugador(jugador.id)">Borrar
                         Jugador</button>
                 </div>
             </div>
