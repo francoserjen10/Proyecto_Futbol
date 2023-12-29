@@ -11,13 +11,13 @@
                     <img [src]="jugadorSeleccionado.urlImagen"
                         alt="{{jugadorSeleccionado.nombre}} {{jugadorSeleccionado.apellido}}">
                     <!-- Mostrar el nombre -->
-                    <input type="text" [(ngModel)]="jugadorSeleccionado.nombre" />
+                    <input type="text" [(ngModel)]="jugadorSeleccionado.nombre" readonly />
                     <!-- mostrar el apellido -->
-                    <input type="text" [(ngModel)]="jugadorSeleccionado.apellido" />
+                    <input type="text" [(ngModel)]="jugadorSeleccionado.apellido" readonly />
                     <!-- mostrar la fecha de nacimiento -->
-                    <input type="text" [(ngModel)]="jugadorSeleccionado.fechaDeNacimiento" />
+                    <input type="text" [(ngModel)]="jugadorSeleccionado.fechaDeNacimiento" readonly />
                     <!-- Mostrar el club -->
-                    <input type="text" [(ngModel)]="jugadorSeleccionado.club" />
+                    <input type="text" [(ngModel)]="jugadorSeleccionado.club" readonly />
                 </div>
                 <div class="button">
                     <!-- mostrar boton "Volver", para ingresar a la informacion del jugador  -->
