@@ -1,0 +1,79 @@
+<div class="container">
+    <div class="title">
+        <h1>Jugador</h1>
+    </div>
+
+    <div class="containerPlayer">
+        <ng-container *ngIf="jugadorSeleccionado">
+            <div class="secondaryPlayerContainer">
+                <div class="container-input-player">
+                    <!-- Mostrar foto del jugador -->
+                    <img [src]="jugadorSeleccionado.urlImagen"
+                        alt="{{jugadorSeleccionado.nombre}} {{jugadorSeleccionado.apellido}}">
+                    <!-- Mostrar el nombre -->
+                    <input type="text" [(ngModel)]="jugadorSeleccionado.nombre" readonly />
+                    <!-- mostrar el apellido -->
+                    <input type="text" [(ngModel)]="jugadorSeleccionado.apellido" readonly />
+                    <!-- mostrar la fecha de nacimiento -->
+                    <input type="text" [(ngModel)]="jugadorSeleccionado.fechaDeNacimiento" readonly />
+                    <!-- Mostrar el club -->
+                    <input type="text" [(ngModel)]="jugadorSeleccionado.club" readonly />
+                </div>
+                <div class="button">
+                    <!-- mostrar boton "Volver", para ingresar a la informacion del jugador  -->
+                    <button class="btn btn-info" type="submit" (click)="volverAJugadores()">Volver</button>
+                    <!-- Boton para abrir el modal -->
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        Modificar jugador
+                    </button>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+
+    <!-- Modal-Formulario -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" *ngIf="jugadorSeleccionado">
+            <div class="modal-content">
+                <form (submit)="updatePlayer(jugadorSeleccionado)">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Actividad</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Bootstrap -->
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Ingrese su nombre</label>
+                            <input type="text" class="form-control" id="name" name="input 1"
+                                [(ngModel)]="jugadorSeleccionado.nombre">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="lastName" class="form-label">Ingrese su apellido</label>
+                            <input type="text" class="form-control" id="lastName" name="input 2"
+                                [(ngModel)]="jugadorSeleccionado.apellido">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="birthdate" class="form-label">Ingrese su fecha de nacimiento</label>
+                            <input type="date" class="form-control" id="birthdate" name="input 3"
+                                [(ngModel)]="jugadorSeleccionado.fechaDeNacimiento">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="club" class="form-label">Ingrese su club</label>
+                            <input type="text" class="form-control" id="club" name="input 4"
+                                [(ngModel)]="jugadorSeleccionado.club">
+                        </div>
+                    </div>
+
+                    <!-- Botones -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-success">Modificar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

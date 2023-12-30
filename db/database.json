@@ -1,0 +1,52 @@
+{
+  "players": [
+    {
+      "urlImagen": "imagen1.jpg",
+      "nombre": "Benjamin",
+      "apellido": "Serjen",
+      "fechaDeNacimiento": "2011-05-07",
+      "club": "Matematico clonado fc",
+      "id": 1
+    },
+    {
+      "urlImagen": "imagen1.jpg",
+      "nombre": "Benja",
+      "apellido": "Min",
+      "fechaDeNacimiento": "8787-07-08",
+      "club": "D,SO,A",
+      "id": 2
+    },
+    {
+      "urlImagen": "imagen1.jpg",
+      "nombre": "Benjamin",
+      "apellido": "Schuft",
+      "fechaDeNacimiento": "",
+      "club": "Algoritmos 22 fc",
+      "id": 3
+    },
+    {
+      "urlImagen": "imagen4.jpg",
+      "nombre": "Patata",
+      "apellido": "Lopez",
+      "fechaDeNacimiento": "2008-04-05",
+      "club": "Portuale fc",
+      "id": 4
+    }
+  ],
+  "appointment": [
+    {
+      "appointmentPlayers": "453543",
+      "appointmentStartDate": "2023-11-29",
+      "appointmentStartTime": "20:09",
+      "appointmentEndTime": "20:09",
+      "id": 2
+    },
+    {
+      "appointmentPlayers": "84545",
+      "appointmentStartDate": "2023-11-29",
+      "appointmentStartTime": "20:13",
+      "appointmentEndTime": "20:13",
+      "id": 3
+    }
+  ]
+}

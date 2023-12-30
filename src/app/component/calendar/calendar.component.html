@@ -1,0 +1,112 @@
+<div class="container">
+    <div class="title">
+        <h1>Calendario de asistencia</h1>
+    </div>
+
+    <div class="buttonContainerModal">
+        <!-- Boton para abrir el modal -->
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            Crear actividad
+        </button>
+    </div>
+
+    <!-- Calendario -->
+    <div>
+        <full-calendar [options]="calendarOptions"></full-calendar>
+    </div>
+
+    <!-- Modal-Formulario -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form (submit)="createAppointmentAndCleanForm(appointment)">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Actividad</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Bootstrap -->
+                        <div class="mb-3">
+                            <label for="appointmentStartDate" class="form-label">Fecha de inicio</label>
+                            <input type="date" class="form-control" id="appointmentStartDate" name="input 1"
+                                placeholder="Ingrese fecha de inicio" [(ngModel)]="appointment.appointmentStartDate">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="appointmentStartTime" class="form-label">Horario de inicio</label>
+                            <input type="time" class="form-control" id="appointmentStartTime" name="input 2"
+                                placeholder="Ingrese horario de inicio" [(ngModel)]="appointment.appointmentStartTime">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="appointmentEndTime" class="form-label">Horario de finalizacion</label>
+                            <input type="time" class="form-control" id="appointmentEndTime" name="input 3"
+                                placeholder="Ingrese horario de finalizacion"
+                                [(ngModel)]="appointment.appointmentEndTime">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="appointmentPlayers" class="form-label">Asistencia</label>
+                            <textarea class="form-control" id="appointmentPlayers" name="input 4"
+                                placeholder="Ingrese jugadores" [(ngModel)]="appointment.appointmentPlayers"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Botones -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-success">Cargar Actividad</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal-Formulario-Modificacion -->
+    <div class="modal fade" id="exampleModalModification" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true" #exampleModalModification>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form (submit)="updateAppointmentsInCalendar(appointment)">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Actividad a Modificar</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Bootstrap -->
+                        <div class="mb-3">
+                            <label for="appointmentStartDate" class="form-label">Fecha de inicio</label>
+                            <input type="date" class="form-control" id="appointmentStartDate" name="input 1"
+                                placeholder="Ingrese fecha de inicio" [(ngModel)]="appointment.appointmentStartDate">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="appointmentStartTime" class="form-label">Horario de inicio</label>
+                            <input type="time" class="form-control" id="appointmentStartTime" name="input 2"
+                                placeholder="Ingrese horario de inicio" [(ngModel)]="appointment.appointmentStartTime">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="appointmentEndTime" class="form-label">Horario de finalizacion</label>
+                            <input type="time" class="form-control" id="appointmentEndTime" name="input 3"
+                                placeholder="Ingrese horario de finalizacion"
+                                [(ngModel)]="appointment.appointmentEndTime">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="appointmentPlayers" class="form-label">Asistencia</label>
+                            <textarea class="form-control" id="appointmentPlayers" name="input 4"
+                                placeholder="Ingrese jugadores" [(ngModel)]="appointment.appointmentPlayers"></textarea>
+                        </div>
+                    </div>
+                    <!-- Botones -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
+                            (click)="deleteAppointmentAndCleanForm(selectedAppointmentId)">Borrar</button>
+                        <button type="submit" class="btn btn-success">Modificar Actividad</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

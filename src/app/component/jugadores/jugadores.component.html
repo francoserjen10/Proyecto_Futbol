@@ -1,0 +1,32 @@
+<div class="container">
+    <div class="title">
+        <h1>Jugadores</h1>
+    </div>
+    <div class="containerOfAllPlayers">
+        <!-- if jugadores else no se encontraron jugadores -->
+        <ng-container *ngIf="jugadores">
+            <div class="containerPlayer" *ngFor="let jugador of jugadores">
+                <div class="container-input-player">
+                    <!-- Mostrar la foto -->
+                    <img [src]="jugador.urlImagen" alt="{{jugador.nombre}} {{jugador.apellido}}">
+                    <!-- Mostrar el nombre -->
+                    <input type="text" [(ngModel)]="jugador.nombre" readonly />
+                    <!-- mostrar el apellido -->
+                    <input type="text" [(ngModel)]="jugador.apellido" readonly />
+                    <!-- mostrar la fecha de nacimiento -->
+                    <input type="text" [(ngModel)]="jugador.fechaDeNacimiento" readonly />
+                    <!-- Mostrar el club -->
+                    <input type="text" [(ngModel)]="jugador.club" readonly />
+                </div>
+                <!-- mostrar boton "Entrar", para ingresar a la informacion del jugador  -->
+                <div class="button">
+                    <a [routerLink]="['/jugador', jugador.id]">
+                        <button class="btn btn-info" type="submit">Entrar</button>
+                    </a>
+                    <button class="btn btn-danger" type="button" (click)="deleteJugador(jugador.id)">Borrar
+                        Jugador</button>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+</div>
