@@ -1,0 +1,8 @@
+.buttonContainerModal {
+    display: flex;
+    justify-content: end;
+}
+
+button {
+    margin: 10px 0;
+}

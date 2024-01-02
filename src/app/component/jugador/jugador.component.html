@@ -2,47 +2,38 @@
     <div class="title">
         <h1>Jugador</h1>
     </div>
-    <div class="container-player" *ngIf="jugadorSeleccionado">
-        <!-- <-- Mostrar foto del jugador -->
-        <div class="imagen-player">
-            <img src="" alt="" />
-        </div>
-        <div class="container-input-player">
-            <div>
-                <!-- Mostrar la foto -->
-                <img [src]="imagesPath + jugadorSeleccionado.urlImagen"
-                    alt="{{jugadorSeleccionado.nombre}} {{jugadorSeleccionado.apellido}}">
+
+    <div class="containerPlayer">
+        <ng-container *ngIf="jugadorSeleccionado">
+            <div class="secondaryPlayerContainer">
+                <div class="container-input-player">
+                    <!-- Mostrar foto del jugador -->
+                    <img [src]="jugadorSeleccionado.urlImagen"
+                        alt="{{jugadorSeleccionado.nombre}} {{jugadorSeleccionado.apellido}}">
+                    <!-- Mostrar el nombre -->
+                    <input type="text" [(ngModel)]="jugadorSeleccionado.nombre" readonly />
+                    <!-- mostrar el apellido -->
+                    <input type="text" [(ngModel)]="jugadorSeleccionado.apellido" readonly />
+                    <!-- mostrar la fecha de nacimiento -->
+                    <input type="text" [(ngModel)]="jugadorSeleccionado.fechaDeNacimiento" readonly />
+                    <!-- Mostrar el club -->
+                    <input type="text" [(ngModel)]="jugadorSeleccionado.club" readonly />
+                </div>
+                <div class="button">
+                    <!-- mostrar boton "Volver", para ingresar a la informacion del jugador  -->
+                    <button class="btn btn-info" type="submit" (click)="volverAJugadores()">Volver</button>
+                    <!-- Boton para abrir el modal -->
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        Modificar jugador
+                    </button>
+                </div>
             </div>
-            <div>
-                <!-- Mostrar el nombre -->
-                <input type="text" [(ngModel)]="jugadorSeleccionado.nombre" />
-            </div>
-            <div>
-                <!-- mostrar el apellido -->
-                <input type="text" [(ngModel)]="jugadorSeleccionado.apellido" />
-            </div>
-            <div>
-                <!-- mostrar la fecha de nacimiento -->
-                <input type="text" [(ngModel)]="jugadorSeleccionado.fechaDeNacimiento" />
-            </div>
-            <div>
-                <!-- Mostrar el club -->
-                <input type="text" [(ngModel)]="jugadorSeleccionado.club" />
-            </div>
-        </div>
-        <div class="button">
-            <!-- mostrar boton "Volver", para ingresar a la informacion del jugador  -->
-            <button class="btn btn-primary" type="submit" (click)="volverAJugadores()">Volver</button>
-            <!-- Boton para abrir el modal -->
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                Modificar jugador
-            </button>
-        </div>
+        </ng-container>
     </div>
 
     <!-- Modal-Formulario -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog" *ngIf="jugadorSeleccionado">
             <div class="modal-content">
                 <form (submit)="updatePlayer(jugadorSeleccionado)">
                     <div class="modal-header">
@@ -78,8 +69,8 @@
 
                     <!-- Botones -->
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        <button type="submit" class="btn btn-primary">Modificar</button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn-success">Modificar</button>
                     </div>
                 </form>
             </div>

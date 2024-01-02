@@ -10,17 +10,9 @@ import { take } from 'rxjs';
 })
 export class JugadoresComponent implements OnInit {
   //Creo arreglo de jugadores de tipo Jugador(interfaz)
-  jugadores: Jugador[] = [
-    {
-      urlImagen: '',
-      nombre: '',
-      apellido: '',
-      fechaDeNacimiento: '',
-      club: '',
-    },
-  ];
+  jugadores: Jugador[];
   //Ruta alternativa de las imagenes para que puedan verse 
-  imagesPath = '../assets/images/';
+  imagesPath = './assets/images/';
 
   // constructor
   constructor(private jugadorService: JugadorService) { }
@@ -35,8 +27,12 @@ export class JugadoresComponent implements OnInit {
     this.jugadorService
       .getAllJugadores()
       .pipe(take(1))
+      //Recorro los objetos jugadores y accedo a la ulrImagen de cada uno para agregarle la ruta alternativa
       .subscribe((value) => {
-        this.jugadores = value;
+        this.jugadores = value.map(jugador => ({
+          ...jugador,
+          urlImagen: this.imagesPath + jugador.urlImagen
+        }));
       });
   }
 

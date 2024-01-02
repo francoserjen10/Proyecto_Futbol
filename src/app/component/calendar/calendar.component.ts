@@ -3,6 +3,7 @@ import { CalendarOptions, EventSourceInput } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
+import esLocale from '@fullcalendar/core/locales/es';
 import { Appointment } from 'src/app/interfaces/appointment';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { ElementRef } from '@angular/core';
@@ -66,6 +67,8 @@ export class CalendarComponent {
     weekends: true,
     //Arreglo de eventos (appointments). (Los appointments que contiene el calendario)
     events: [],
+    //Idioma del calendario
+    locale: esLocale,
 
     // ----------------PARA MOSTRAR PROPIEDADES DE LOS EVENTOS-----------------
     // Se declara en true para que aparezca el horario de finalizacion de los appointments

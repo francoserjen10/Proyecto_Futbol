@@ -9,18 +9,12 @@ import { JugadorService } from 'src/app/services/jugador.service';
   styleUrls: ['./jugador.component.css'],
 })
 export class JugadorComponent implements OnInit {
-  //Atributo donde se inicializa el jugador seleccionado y se almacena el jugador seleccionado con el id correspondiente
-  jugadorSeleccionado: Jugador = {
-    urlImagen: '',
-    nombre: '',
-    apellido: '',
-    fechaDeNacimiento: '',
-    club: ''
-  };
+  //Se cre el atributo jugador seleccionado y se almacena el jugador que se selecciono con el id correspondiente
+  jugadorSeleccionado: Jugador;
   //atributo indice para recibir los jugadores con su id
   indice: number = 0;
   //Ruta alternativa de las imagenes para que puedan verse 
-  imagesPath = '../assets/images/';
+  imagesPath = './assets/images/';
 
   //constructor
   constructor(
@@ -37,14 +31,14 @@ export class JugadorComponent implements OnInit {
 
   //Metodo que llama al servicio para obtener el jugador con su id y almacenarlo en jugadorSeleccionado
   recibirJugador(jugadorId: number) {
-    // this.jugadorSeleccionado = this.jugadorService.encontrarJugadorPorId(this.indice);
     this.jugadorService.getJugadorById(jugadorId).subscribe((jugador) => {
       this.jugadorSeleccionado = jugador;
-
+      //Se agrega la ruta alternativa a la urlImagen para obtener la imagen
+      this.jugadorSeleccionado.urlImagen = this.imagesPath + this.jugadorSeleccionado.urlImagen;
     });
   }
 
-  //Metodo que se aplical al boton "Volver", donde escucha el evento click y actua volviendo al componente jugadores
+  //Metodo que se aplica al boton "Volver", donde escucha el evento click y actua volviendo al componente jugadores
   volverAJugadores() {
     this.router.navigate(['/jugadores']);
   }

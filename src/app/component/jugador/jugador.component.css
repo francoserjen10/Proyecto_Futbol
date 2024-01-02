@@ -1,3 +1,32 @@
+.containerPlayer {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.secondaryPlayerContainer {
+    background: linear-gradient(to bottom right, blue, pink);
+    width: 250px;
+    height: 355px;
+    border: solid black 3px;
+    margin: 10px;
+}
+
+.container-input-player {
+    padding: 5px;
+}
+
 img {
-    width: 200px;
+    width: 100%;
+}
+
+input {
+    width: 100%;
+    text-align: center;
+}
+
+.button {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    margin-top: 1px;
 }
