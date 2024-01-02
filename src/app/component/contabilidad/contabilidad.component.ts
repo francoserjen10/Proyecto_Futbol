@@ -3,7 +3,6 @@ import { AssistedPlayer } from 'src/app/interfaces/assisted-player';
 import { PlayerPayment } from 'src/app/interfaces/player-payment';
 import { PlayerPaymentsService } from 'src/app/services/player-payments.service';
 import { PlayerAsisstanceService } from 'src/app/services/player-asisstance.service';
-import { SharedProperties } from 'src/app/interfaces/sharedProperties';
 
 @Component({
   selector: 'app-contabilidad',
@@ -17,20 +16,13 @@ export class ContabilidadComponent {
   // --------------------- Pagos ---------------------
   payments: PlayerPayment[] = [];
   newPayment = {} as PlayerPayment;
-  // --------------------- Fecha (propiedad que comparten las interfaces) ---------------------
-  sharedProperties: SharedProperties = {
-    date: new Date()
-  };
-  //
-  combinedList: (AssistedPlayer | PlayerPayment)[] = [];
   // --------------------- Mostrar formulario ---------------------
   showForm: boolean = false;
 
   constructor(private playerPaymentsService: PlayerPaymentsService, private playerAsisstancesService: PlayerAsisstanceService) { }
 
   ngOnInit(): void {
-    this.obtainPlayersPayments();
-    this.obtainPlayersAsisstances();
+    this.obtainPlayerAsisstanceAndPayment();
   }
 
   // ------------------------------------------ Crear pago y asistencia del jugador ------------------------------------------
@@ -38,7 +30,6 @@ export class ContabilidadComponent {
   createPlayerPayment(): void {
     this.playerPaymentsService.createPlayerPayments(this.newPayment).subscribe({
       next(pay) {
-        console.log("Pago del jugador creado", pay);
         alert("Se agrego el pago del jugador");
       },
       error(err) {
@@ -55,7 +46,6 @@ export class ContabilidadComponent {
   createPlayerAsisstance(): void {
     this.playerAsisstancesService.createPlayerAsisstance(this.newAsisstance).subscribe({
       next(asisstance) {
-        console.log("Asistencia del jugador creado", asisstance);
         alert("Se agrego la asistencia del jugador");
       },
       error(err) {
@@ -106,7 +96,7 @@ export class ContabilidadComponent {
 
   //Elimino la asistencia del jugador
   deletePlayerAsisstance(playerAsisstanceId: number) {
-    this.playerPaymentsService.deletePlayerPaymentsById(playerAsisstanceId).subscribe(() => {
+    this.playerAsisstancesService.deletePlayerAsisstancesById(playerAsisstanceId).subscribe(() => {
       alert('Asistencia del jugador eliminado');
       this.obtainPlayersAsisstances();
     });
@@ -123,18 +113,4 @@ export class ContabilidadComponent {
   OpenForm() {
     this.showForm = !this.showForm;
   }
-
-  // ------------------------------------------ Combino las propiedades que comparten las interfaces ------------------------------------------
-  groupInterfaceProperties(): void {
-    this.newAsisstance.date = this.sharedProperties.date;
-    this.newPayment.date = this.sharedProperties.date;
-  }
-
-  // ------------------------------------------ Combino y obtengo los arreglos de asistencias y de pagos ------------------------------------------
-  //Obtencion de lista combinada de los arreglos 
-  getCombinedList(): (AssistedPlayer | PlayerPayment)[] {
-    return [...this.asisstances, ...this.payments];
-  }
-  
-
 }
