@@ -18,9 +18,6 @@ export class ContabilidadComponent {
   newPayment = {} as PlayerPayment;
   // --------------------- Mostrar formulario ---------------------
   showForm: boolean = false;
-  // --------------------- Fecha (propiedad que comparten las interfaces) ---------------------
-  sharedProperties: Date[] = [];
-
 
   constructor(private playerPaymentsService: PlayerPaymentsService, private playerAsisstancesService: PlayerAsisstanceService) { }
 
@@ -110,15 +107,6 @@ export class ContabilidadComponent {
     this.deletePlayerAsisstance(playerId);
     this.deletePlayerPayment(playerId);
   }
-
-  // ------------------------------------------ Fecha de asistencias y pagos ------------------------------------------
-  //Metodo donde unifica las fechas de asistencias y pagos
-  unifiesAsisstanceAndPaymentDates(): void {
-    this.sharedProperties = [this.newAsisstance.date, this.newPayment.date];
-    console.log(this.sharedProperties);
-
-  }
-
   // ------------------------------------------ Abro/Cierro formulario ------------------------------------------
   //Abrir y cerrar el formulario 
   OpenForm() {
