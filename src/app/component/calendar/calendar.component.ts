@@ -8,6 +8,8 @@ import { Appointment } from 'src/app/interfaces/appointment';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { ElementRef } from '@angular/core';
 import * as bootstrap from 'bootstrap';
+import { JugadorService } from 'src/app/services/jugador.service';
+import { Jugador } from 'src/app/interfaces/Jugador';
 
 @Component({
   selector: 'app-calendar',
@@ -19,9 +21,12 @@ export class CalendarComponent {
 
   @ViewChild('exampleModalModification') exampleModalModification: ElementRef;
 
+  //Variable donde guardo todos los jugadores que se obtienen del servicio get
+  players: Jugador[] = [];
+
   //Inicializacion de la interfas
   appointment: Appointment = {
-    appointmentPlayers: '',
+    appointmentPlayers: [],
     appointmentStartDate: '',
     appointmentStartTime: '',
     appointmentEndTime: ''
@@ -35,8 +40,12 @@ export class CalendarComponent {
     this.selectedAppointmentId = info.event.id;
     //Le asigno el appointment seleccionado
     const appointment = info.event;
-    //Muestro la informacion del appointment seleccionado en el formulario
-    this.appointment.appointmentPlayers = appointment.title;
+    //Genero una cadena con los nombres de los jugadores seleccionados
+    const selectedPlayersNames = appointment.extendedProps.players.map((player: Jugador) => `${player.nombre} ${player.apellido}`).join(', ');
+    //Le asigna la información de los jugadores seleccionados a this.appointment.appointmentPlayers
+    this.appointment.appointmentPlayers = appointment.extendedProps.players;
+    //Le asigno la cadena de nombre y apellido del jugador al titulo del evento en el calendario
+    appointment.setProp('title', selectedPlayersNames);
     // toISOString() = Se usa para formatear un objeto de fecha en una cadena de texto en formato de fecha ISO
     // .split('T')[0] = Y aca se quiere extraer solo la parte de la fecha y asi puede aparecer en el formulario
     this.appointment.appointmentStartDate = appointment.start.toISOString().split('T')[0];
@@ -86,31 +95,16 @@ export class CalendarComponent {
     eventClick: this.handleEventClick,
   };
 
-  constructor(private appointmentService: AppointmentService) { }
+  constructor(private appointmentService: AppointmentService, private playerService: JugadorService) { }
 
   // En el ngOnInit, al recargar la pagina se ejecutara primero
   ngOnInit(): void {
     this.getAllAppointmentInCalendar();
+    this.ObtainListPlayers();
   }
 
-  // CRUD: "LEER"
-  getAllAppointmentInCalendar(): void {
-    this.appointmentService.getAllAppointments().subscribe((appointments: Appointment[]) => {
-      const events: EventSourceInput = appointments.map(appointment => ({
-        //Se le pasa los datos del nuevo appointment a la informacion del calendario
-        title: appointment.appointmentPlayers,
-        start: appointment.appointmentStartDate + ' ' + appointment.appointmentStartTime,
-        end: appointment.appointmentStartDate + ' ' + appointment.appointmentEndTime,
-        //Al id se lo transforma en string, ya que el tipo que acepta los eventos en esta libreria (EventSourceInput), acepta solamente string
-        id: appointment.id.toString()
-      }));
-      // Actualiza los appointments del calendario
-      this.calendarOptions.events = events;
-    });
-  }
-
-  // //Creo tarea y actualizo el calendario
-  // // CRUD: CREAR
+  // ---------------------------------------------------- Creacion de Appointment ----------------------------------------------------
+  //Creo tarea y actualizo el calendario
   createAppointment(appointment: Appointment): void {
     //Tengo un appointment nuevo
     const newAppointment: Appointment = {
@@ -119,8 +113,9 @@ export class CalendarComponent {
       appointmentStartTime: appointment.appointmentStartTime,
       appointmentEndTime: appointment.appointmentEndTime
     };
-    //   // #TODO (opcional): Se puede agregar una validación para saber si el formulario que envió está ok
-    //   //Llamo al servicio
+
+    // #TODO (opcional): Se puede agregar una validación para saber si el formulario que envió está ok
+    //Llamo al servicio
     this.appointmentService.createAppointment(appointment).subscribe({
       next(appointment) {
         alert('Se creó el Entrenamiento exitosamente');
@@ -132,14 +127,28 @@ export class CalendarComponent {
     });
     //Actualizo la lista de todos los appointments creados
     this.getAllAppointmentInCalendar();
-    //Cierro el modal del formulario de modificacion despues de borrar
-    const modal = new bootstrap.Modal(this.exampleModalModification.nativeElement);
-    modal.hide();
   }
+
+  // // CRUD: "LEER"
+  getAllAppointmentInCalendar(): void {
+    this.appointmentService.getAllAppointments().subscribe((appointments: Appointment[]) => {
+      const events: EventSourceInput = appointments.map(appointment => ({
+        //  Se le pasa los datos del nuevo appointment a la informacion del calendario
+        title: appointment.appointmentPlayers.toString(),
+        start: appointment.appointmentStartDate + ' ' + appointment.appointmentStartTime,
+        end: appointment.appointmentStartDate + ' ' + appointment.appointmentEndTime,
+        //  Al id se lo transforma en string, ya que el tipo que acepta los eventos en esta libreria (EventSourceInput), acepta solamente string
+        id: appointment.id.toString()
+      }));
+      // Actualiza los appointments del calendario
+      this.calendarOptions.events = events;
+    });
+  }
+
 
   //CRUD: "ACTUALIZAR"
   updateAppointmentsInCalendar(appointment: Appointment) {
-    //Modifico el evento
+    // Modifico el evento
     const appointmentModified: Appointment = {
       appointmentPlayers: appointment.appointmentPlayers,
       appointmentStartDate: appointment.appointmentStartDate,
@@ -148,7 +157,7 @@ export class CalendarComponent {
       id: this.selectedAppointmentId
     };
 
-    //llamo al servicio
+    //  llamo al servicio
     this.appointmentService.updateEAppointments(appointmentModified).subscribe(() => {
       alert('Se actualizo el entrenamiento exitosamente');
       //  Actualizo nuevamente
@@ -156,27 +165,34 @@ export class CalendarComponent {
       //  Limpio el formulario
       this.cleanForm();
     })
-    //Cierro el modal del formulario de modificacion despues de borrar
+    //  Cierro el modal del formulario de modificacion despues de borrar
     const modal = new bootstrap.Modal(this.exampleModalModification.nativeElement);
     modal.hide();
   }
 
-  // //CRUD: "BORRAR"
+  // CRUD: "BORRAR"
   deleteAppointmentInCalendar(appointmentId: number): void {
     this.appointmentService.deleteAppointmentsById(appointmentId).subscribe(() => {
       alert('Se elimino el entrenamiento exitosamente');
       // Actualizo la lista de todos los appointments nuevamente
       this.getAllAppointmentInCalendar();
     });
-    //Cierro el modal del formulario de modificacion despues de borrar
+    //  Cierro el modal del formulario de modificacion despues de borrar
     const modal = new bootstrap.Modal(this.exampleModalModification.nativeElement);
     modal.hide();
+  }
+
+  //Obtengo listado de jugadores
+  ObtainListPlayers(): void {
+    this.playerService.getAllJugadores().subscribe((value) => {
+      this.players = value;
+    });
   }
 
   //Limpia el formulario
   cleanForm() {
     this.appointment = {
-      appointmentPlayers: '',
+      appointmentPlayers: [],
       appointmentStartDate: '',
       appointmentStartTime: '',
       appointmentEndTime: ''
