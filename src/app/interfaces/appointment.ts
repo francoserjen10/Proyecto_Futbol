@@ -1,5 +1,7 @@
+import { Jugador } from "./Jugador";
+
 export interface Appointment  {
-    appointmentPlayers: string,
+    appointmentPlayers: Jugador[],
     appointmentStartDate: string,
     appointmentStartTime: string,
     appointmentEndTime: string,
