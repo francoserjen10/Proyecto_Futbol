@@ -45,10 +45,16 @@
                                 [(ngModel)]="appointment.appointmentEndTime">
                         </div>
 
-                        <div class="mb-3">
-                            <label for="appointmentPlayers" class="form-label">Asistencia</label>
-                            <textarea class="form-control" id="appointmentPlayers" name="input 4"
-                                placeholder="Ingrese jugadores" [(ngModel)]="appointment.appointmentPlayers"></textarea>
+                        <div *ngIf="players && players.length > 0">
+                            <div *ngFor="let player of players; let i = index" class="mb-3">
+                                <label for="assistance" class="form-label">Asistencia</label>
+                                <select name="selectedPlayer{{ i }}" id="assistance{{ i }}"
+                                    [(ngModel)]="appointment.appointmentPlayers[i]">
+                                    <option *ngFor="let player of players" [ngValue]="player">
+                                        {{player.nombre}} {{player.apellido}}
+                                    </option>
+                                </select>
+                            </div>
                         </div>
                     </div>
 
