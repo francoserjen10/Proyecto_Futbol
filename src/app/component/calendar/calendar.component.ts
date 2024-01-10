@@ -10,6 +10,8 @@ import { ElementRef } from '@angular/core';
 import * as bootstrap from 'bootstrap';
 import { JugadorService } from 'src/app/services/jugador.service';
 import { Jugador } from 'src/app/interfaces/Jugador';
+import { PlayerPaymentsService } from 'src/app/services/player-payments.service';
+import { PlayerPayment } from 'src/app/interfaces/player-payment';
 
 @Component({
   selector: 'app-calendar',
@@ -23,6 +25,9 @@ export class CalendarComponent {
 
   //Variable donde guardo todos los jugadores que se obtienen del servicio get
   players: Jugador[] = [];
+
+  //Variable donde guardo los pagos de los jugadores
+  payments: PlayerPayment[];
 
   //Inicializacion de la interfas
   appointment: Appointment = {
@@ -99,7 +104,7 @@ export class CalendarComponent {
     eventClick: this.handleEventClick,
   };
 
-  constructor(private appointmentService: AppointmentService, private playerService: JugadorService) { }
+  constructor(private appointmentService: AppointmentService, private playerService: JugadorService, private paymentsService: PlayerPaymentsService) { }
 
   // En el ngOnInit, al recargar la pagina se ejecutara primero
   ngOnInit(): void {
@@ -107,7 +112,7 @@ export class CalendarComponent {
     this.ObtainListPlayers();
   }
 
-  // ---------------------------------------------------- Creacion de Appointment ----------------------------------------------------
+  // ---------------------------------------------------- Creación de Appointment ----------------------------------------------------
   //Creo tarea y actualizo el calendario
   createAppointment(appointment: Appointment): void {
     //Tengo un appointment nuevo
@@ -117,7 +122,6 @@ export class CalendarComponent {
       appointmentStartTime: appointment.appointmentStartTime,
       appointmentEndTime: appointment.appointmentEndTime
     };
-
     // #TODO (opcional): Se puede agregar una validación para saber si el formulario que envió está ok
     //Llamo al servicio
     this.appointmentService.createAppointment(appointment).subscribe({
@@ -133,6 +137,7 @@ export class CalendarComponent {
     this.getAllAppointmentInCalendar();
   }
 
+  // ---------------------------------------------------- Obtención de Appointment ----------------------------------------------------
   // CRUD: "LEER"
   getAllAppointmentInCalendar(): void {
     this.appointmentService.getAllAppointments().subscribe((appointments: Appointment[]) => {
@@ -152,6 +157,16 @@ export class CalendarComponent {
     });
   }
 
+  // ---------------------------------------------------- Obtención de Jugadores ----------------------------------------------------
+  //Obtengo listado de jugadores
+  ObtainListPlayers(): void {
+    this.playerService.getAllJugadores().subscribe((value) => {
+      this.players = value;
+      this.players.forEach(player => player.pay = false);
+    });
+  }
+
+  // ---------------------------------------------------- Actualización de Appointments ----------------------------------------------------
   //CRUD: "ACTUALIZAR"
   updateAppointmentsInCalendar(appointment: Appointment) {
     // Modifico el evento
@@ -176,6 +191,7 @@ export class CalendarComponent {
     modal.hide();
   }
 
+  // ---------------------------------------------------- Borrar Appointments ----------------------------------------------------
   // CRUD: "BORRAR"
   deleteAppointmentInCalendar(appointmentId: number): void {
     this.appointmentService.deleteAppointmentsById(appointmentId).subscribe(() => {
@@ -188,12 +204,7 @@ export class CalendarComponent {
     modal.hide();
   }
 
-  //Obtengo listado de jugadores
-  ObtainListPlayers(): void {
-    this.playerService.getAllJugadores().subscribe((value) => {
-      this.players = value;
-    });
-  }
+
 
   //Limpia el formulario
   cleanForm() {

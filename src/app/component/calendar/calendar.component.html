@@ -44,16 +44,27 @@
                                 placeholder="Ingrese horario de finalizacion"
                                 [(ngModel)]="appointment.appointmentEndTime">
                         </div>
+                        <div class="containerOfPaymentsAndAssistance" *ngIf="players && players.length > 0">
+                            <!-- Asistencias -->
+                            <div class="assistanceOfPlayers">
+                                <div *ngFor="let player of players; let i = index" class="mb-3">
+                                    <label for="assistance" class="form-label">Asistencia</label>
+                                    <select name="selectedPlayer{{ i }}" id="assistance{{ i }}"
+                                        [(ngModel)]="appointment.appointmentPlayers[i]">
+                                        <option *ngFor="let playerOption of players" [ngValue]="player">
+                                            {{playerOption.nombre}} {{playerOption.apellido}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
 
-                        <div *ngIf="players && players.length > 0">
-                            <div *ngFor="let player of players; let i = index" class="mb-3">
-                                <label for="assistance" class="form-label">Asistencia</label>
-                                <select name="selectedPlayer{{ i }}" id="assistance{{ i }}"
-                                    [(ngModel)]="appointment.appointmentPlayers[i]">
-                                    <option *ngFor="let playerOption of players" [ngValue]="player">
-                                        {{playerOption.nombre}} {{playerOption.apellido}}
-                                    </option>
-                                </select>
+                            <!-- Pagos -->
+                            <div class="paymentsOfPlayers">
+                                <div *ngFor="let player of players; let i = index">
+                                    <label for="payments">Pagó/No pagó</label>
+                                    <input type="checkbox" id="payments{{ i }}" name="pay"
+                                        [(ngModel)]="appointment.appointmentPlayers">
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -1,8 +1,12 @@
 .buttonContainerModal {
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
 }
 
 button {
     margin: 10px 0;
+}
+
+.containerOfPaymentsAndAssistance {
+    display: flex;
 }
