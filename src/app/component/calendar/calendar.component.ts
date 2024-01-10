@@ -36,16 +36,15 @@ export class CalendarComponent {
   selectedAppointmentId: number;
 
   handleEventClick = (info: any) => {
-    //Le asigno el id del appointment seleccionado
-    this.selectedAppointmentId = info.event.id;
+    // --------------------------------- Appointment ---------------------------------
     //Le asigno el appointment seleccionado
     const appointment = info.event;
-    //Genero una cadena con los nombres de los jugadores seleccionados
-    const selectedPlayersNames = appointment.extendedProps.players.map((player: Jugador) => `${player.nombre} ${player.apellido}`).join(', ');
-    //Le asigna la información de los jugadores seleccionados a this.appointment.appointmentPlayers
-    this.appointment.appointmentPlayers = appointment.extendedProps.players;
-    //Le asigno la cadena de nombre y apellido del jugador al titulo del evento en el calendario
-    appointment.setProp('title', selectedPlayersNames);
+
+    // --------------------------------- Appointment Id ---------------------------------
+    //Le asigno el id del appointment seleccionado
+    this.selectedAppointmentId = info.event.id;
+
+    // --------------------------------- Appointment Date/Hour ---------------------------------
     // toISOString() = Se usa para formatear un objeto de fecha en una cadena de texto en formato de fecha ISO
     // .split('T')[0] = Y aca se quiere extraer solo la parte de la fecha y asi puede aparecer en el formulario
     this.appointment.appointmentStartDate = appointment.start.toISOString().split('T')[0];
@@ -54,6 +53,11 @@ export class CalendarComponent {
     this.appointment.appointmentStartTime = appointment.start.toISOString().split('T')[1].substring(0, 5);
     this.appointment.appointmentEndTime = appointment.end.toISOString().split('T')[1].substring(0, 5);
 
+    // --------------------------------- Appointment title ---------------------------------
+    //Le asigna la información de los jugadores seleccionados a this.appointment.appointmentPlayers
+    this.appointment.appointmentPlayers = appointment.title;
+
+    // --------------------------------- Open modification form ---------------------------------
     //Abro el modal del formulario de modificacion
     const modal = new bootstrap.Modal(this.exampleModalModification.nativeElement);
     modal.show();
@@ -129,22 +133,24 @@ export class CalendarComponent {
     this.getAllAppointmentInCalendar();
   }
 
-  // // CRUD: "LEER"
+  // CRUD: "LEER"
   getAllAppointmentInCalendar(): void {
     this.appointmentService.getAllAppointments().subscribe((appointments: Appointment[]) => {
-      const events: EventSourceInput = appointments.map(appointment => ({
-        //  Se le pasa los datos del nuevo appointment a la informacion del calendario
-        title: appointment.appointmentPlayers.toString(),
-        start: appointment.appointmentStartDate + ' ' + appointment.appointmentStartTime,
-        end: appointment.appointmentStartDate + ' ' + appointment.appointmentEndTime,
-        //  Al id se lo transforma en string, ya que el tipo que acepta los eventos en esta libreria (EventSourceInput), acepta solamente string
-        id: appointment.id.toString()
-      }));
+      const events: EventSourceInput = appointments.map(appointment => {
+        const playersString = Array.isArray(appointment.appointmentPlayers) ? appointment.appointmentPlayers.map(value => `${value.nombre} ${value.apellido}`).join(", ") : '';
+        return {
+          //  Se le pasa los datos del nuevo appointment a la informacion del calendario
+          title: playersString,
+          start: appointment.appointmentStartDate + ' ' + appointment.appointmentStartTime,
+          end: appointment.appointmentStartDate + ' ' + appointment.appointmentEndTime,
+          //  Al id se lo transforma en string, ya que el tipo que acepta los eventos en esta libreria (EventSourceInput), acepta solamente string
+          id: appointment.id.toString()
+        };
+      });
       // Actualiza los appointments del calendario
       this.calendarOptions.events = events;
     });
   }
-
 
   //CRUD: "ACTUALIZAR"
   updateAppointmentsInCalendar(appointment: Appointment) {

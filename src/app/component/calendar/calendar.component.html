@@ -50,8 +50,8 @@
                                 <label for="assistance" class="form-label">Asistencia</label>
                                 <select name="selectedPlayer{{ i }}" id="assistance{{ i }}"
                                     [(ngModel)]="appointment.appointmentPlayers[i]">
-                                    <option *ngFor="let player of players" [ngValue]="player">
-                                        {{player.nombre}} {{player.apellido}}
+                                    <option *ngFor="let playerOption of players" [ngValue]="player">
+                                        {{playerOption.nombre}} {{playerOption.apellido}}
                                     </option>
                                 </select>
                             </div>
