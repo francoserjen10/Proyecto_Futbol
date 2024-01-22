@@ -12,6 +12,7 @@ import { JugadorService } from 'src/app/services/jugador.service';
 import { Jugador } from 'src/app/interfaces/Jugador';
 import { PlayerPaymentsService } from 'src/app/services/player-payments.service';
 import { PlayerPayment } from 'src/app/interfaces/player-payment';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-calendar',
@@ -23,19 +24,23 @@ export class CalendarComponent {
 
   @ViewChild('exampleModalModification') exampleModalModification: ElementRef;
 
-  //Variable donde guardo todos los jugadores que se obtienen del servicio get
-  players: Jugador[] = [];
+  // ---------------------------------------------------- Inicializacion de interfaz  ----------------------------------------------------
+  //Inicializacion de la interfas
+  appointment: Appointment | undefined;
+
+  // ---------------------------------------------------- Variables donde almaceno eventos y jugadores ----------------------------------------------------
+  //Variable donde guardo todos los eventos
+  appointments: Appointment[] = [];
+  //Variable donde guardo todos los jugadores
+  players: Jugador[];
+  //Variable donde guardo todos los jugadores
+  appointmentsWithPlayers: any[];
+
+
 
   //Variable donde guardo los pagos de los jugadores
   payments: PlayerPayment[];
 
-  //Inicializacion de la interfas
-  appointment: Appointment = {
-    appointmentPlayers: [],
-    appointmentStartDate: '',
-    appointmentStartTime: '',
-    appointmentEndTime: ''
-  };
 
   //Almaceno el id del evento seleccionado
   selectedAppointmentId: number;
@@ -48,7 +53,6 @@ export class CalendarComponent {
     // --------------------------------- Appointment Id ---------------------------------
     //Le asigno el id del appointment seleccionado
     this.selectedAppointmentId = info.event.id;
-
     // --------------------------------- Appointment Date/Hour ---------------------------------
     // toISOString() = Se usa para formatear un objeto de fecha en una cadena de texto en formato de fecha ISO
     // .split('T')[0] = Y aca se quiere extraer solo la parte de la fecha y asi puede aparecer en el formulario
@@ -108,8 +112,59 @@ export class CalendarComponent {
 
   // En el ngOnInit, al recargar la pagina se ejecutara primero
   ngOnInit(): void {
-    this.getAllAppointmentInCalendar();
-    this.ObtainListPlayers();
+    this.getEventsAndPlayers();
+    this.setEventsAndPlayers()
+  }
+
+  // ---------------------------------------------------- Obtencion de Appointments y Players al mismo tiempo (forkJoin) ----------------------------------------------------
+  getEventsAndPlayers() {
+    // obtengo eventos y jugadores al mismo tiempo
+    forkJoin({ players: this.playerService.getAllJugadores(), appointments: this.appointmentService.getAllAppointments() }).subscribe(results => {
+      //Le asigno los eventos a la variable appointments
+      this.appointments = results.appointments;
+      //Le asigno los jugadores a la variable players
+      this.players = results.players;
+      //Armo el vento con los jugadores seleccionados y con la informacion de cada uno
+      this.appointmentsWithPlayers = results.appointments.map((appointment) => { //Recorro evento por evento
+        return {
+          ...appointment,
+          appointmentPlayers: appointment.appointmentPlayers.map((player) => { //Recorro lista de jugadores dentro de cada evento
+            const playerInfo = results.players.find((value) => value.id === player.playerId);
+            if (playerInfo) {
+              return {
+                ...player,
+                playerWhoAttended: {
+                  name: playerInfo.nombre,
+                  lastName: playerInfo.apellido,
+                  id: playerInfo.id
+                },
+              };
+            }
+            return player;
+          }),
+        }
+      });
+    })
+  }
+
+  // ---------------------------------------------------- Seteo la información de los servicios, al calendario ----------------------------------------------------
+  setEventsAndPlayers() {
+    //Verifico se this.appointmentsWithPlayers existe
+    if (this.appointmentsWithPlayers && this.appointmentsWithPlayers.length > 0) {
+      //Armo el evento con los jugadores y su información
+      const setAppointmentWithPlayers: EventSourceInput = this.appointmentsWithPlayers.map(appointment => {
+        const playersString = Array.isArray(appointment.appointmentPlayers) ? appointment.appointmentPlayers.map(value => `${value.playerWhoAttended.name} ${value.playerWhoAttended.lastName}`).join(", ") : '';
+        return {
+          //Se le pasa los datos del nuevo appointment a la informacion del calendario
+          title: playersString,
+          start: appointment.appointmentStartDate + ' ' + appointment.appointmentStartTime,
+          end: appointment.appointmentStartDate + ' ' + appointment.appointmentEndTime,
+          id: appointment.id
+        };
+      })
+      //Le asigno los eventos con diuchos jugadores y su información a la propiedad que pertenece a FullCalendar "events"
+      this.calendarOptions.events = setAppointmentWithPlayers;
+    }
   }
 
   // ---------------------------------------------------- Creación de Appointment ----------------------------------------------------
@@ -133,37 +188,6 @@ export class CalendarComponent {
         alert('Ocurrió un error al intentar crear el jugEntrenamientoador');
       },
     });
-    //Actualizo la lista de todos los appointments creados
-    this.getAllAppointmentInCalendar();
-  }
-
-  // ---------------------------------------------------- Obtención de Appointment ----------------------------------------------------
-  // CRUD: "LEER"
-  getAllAppointmentInCalendar(): void {
-    this.appointmentService.getAllAppointments().subscribe((appointments: Appointment[]) => {
-      const events: EventSourceInput = appointments.map(appointment => {
-        const playersString = Array.isArray(appointment.appointmentPlayers) ? appointment.appointmentPlayers.map(value => `${value.nombre} ${value.apellido}`).join(", ") : '';
-        return {
-          //  Se le pasa los datos del nuevo appointment a la informacion del calendario
-          title: playersString,
-          start: appointment.appointmentStartDate + ' ' + appointment.appointmentStartTime,
-          end: appointment.appointmentStartDate + ' ' + appointment.appointmentEndTime,
-          //  Al id se lo transforma en string, ya que el tipo que acepta los eventos en esta libreria (EventSourceInput), acepta solamente string
-          id: appointment.id.toString()
-        };
-      });
-      // Actualiza los appointments del calendario
-      this.calendarOptions.events = events;
-    });
-  }
-
-  // ---------------------------------------------------- Obtención de Jugadores ----------------------------------------------------
-  //Obtengo listado de jugadores
-  ObtainListPlayers(): void {
-    this.playerService.getAllJugadores().subscribe((value) => {
-      this.players = value;
-      this.players.forEach(player => player.pay = false);
-    });
   }
 
   // ---------------------------------------------------- Actualización de Appointments ----------------------------------------------------
@@ -181,10 +205,6 @@ export class CalendarComponent {
     //  llamo al servicio
     this.appointmentService.updateEAppointments(appointmentModified).subscribe(() => {
       alert('Se actualizo el entrenamiento exitosamente');
-      //  Actualizo nuevamente
-      this.getAllAppointmentInCalendar();
-      //  Limpio el formulario
-      this.cleanForm();
     })
     //  Cierro el modal del formulario de modificacion despues de borrar
     const modal = new bootstrap.Modal(this.exampleModalModification.nativeElement);
@@ -196,33 +216,9 @@ export class CalendarComponent {
   deleteAppointmentInCalendar(appointmentId: number): void {
     this.appointmentService.deleteAppointmentsById(appointmentId).subscribe(() => {
       alert('Se elimino el entrenamiento exitosamente');
-      // Actualizo la lista de todos los appointments nuevamente
-      this.getAllAppointmentInCalendar();
     });
     //  Cierro el modal del formulario de modificacion despues de borrar
     const modal = new bootstrap.Modal(this.exampleModalModification.nativeElement);
     modal.hide();
-  }
-
-
-
-  //Limpia el formulario
-  cleanForm() {
-    this.appointment = {
-      appointmentPlayers: [],
-      appointmentStartDate: '',
-      appointmentStartTime: '',
-      appointmentEndTime: ''
-    }
-  }
-
-  createAppointmentAndCleanForm(appointment: Appointment) {
-    this.createAppointment(appointment);
-    this.cleanForm();
-  }
-
-  deleteAppointmentAndCleanForm(appointmentId: number) {
-    this.deleteAppointmentInCalendar(appointmentId);
-    this.cleanForm();
   }
 }
