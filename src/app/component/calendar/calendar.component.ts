@@ -1,4 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
+import { ElementRef } from '@angular/core';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import * as bootstrap from 'bootstrap';
+
 import { CalendarOptions, EventSourceInput } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
@@ -6,12 +10,9 @@ import interactionPlugin from '@fullcalendar/interaction';
 import esLocale from '@fullcalendar/core/locales/es';
 import { Appointment } from 'src/app/interfaces/appointment';
 import { AppointmentService } from 'src/app/services/appointment.service';
-import { ElementRef } from '@angular/core';
-import * as bootstrap from 'bootstrap';
 import { JugadorService } from 'src/app/services/jugador.service';
 import { Jugador } from 'src/app/interfaces/Jugador';
 import { PlayerPaymentsService } from 'src/app/services/player-payments.service';
-import { PlayerPayment } from 'src/app/interfaces/player-payment';
 import { forkJoin } from 'rxjs';
 
 @Component({
@@ -24,24 +25,21 @@ export class CalendarComponent {
 
   @ViewChild('exampleModalModification') exampleModalModification: ElementRef;
 
+  newAppointmentForm: FormGroup;
   // ---------------------------------------------------- Inicializacion de interfaz  ----------------------------------------------------
   //Inicializacion de la interfas
-  appointment: Appointment | undefined;
-
-  // ---------------------------------------------------- Variables donde almaceno eventos y jugadores ----------------------------------------------------
-  //Variable donde guardo todos los eventos
-  appointments: Appointment[] = [];
+  //Tambien la puedo usar para limpiar el formulario
+  // ""--Es un objeto vacio--""
+  appointment = {} as Appointment | undefined;
+  // ---------------------------------------------------- Variables donde almaceno appointment y jugadores ----------------------------------------------------
+  //Variable donde guardo todos los appointment
+  allAppointments: Appointment[];
   //Variable donde guardo todos los jugadores
-  players: Jugador[];
-  //Variable donde guardo todos los jugadores
-  appointmentsWithPlayers: any[];
-
-
-
-  //Variable donde guardo los pagos de los jugadores
-  payments: PlayerPayment[];
-
-
+  allPlayers: Jugador[];
+  // Variable donde guardo el appointment con los jugadores
+  combinedAppointmentsWithPlayers: Appointment[] | undefined;
+  //variable donde guardo los jugadores seleccionados en el select de asistencia
+  selectedPlayers: string[] | undefined;
   //Almaceno el id del evento seleccionado
   selectedAppointmentId: number;
 
@@ -108,92 +106,133 @@ export class CalendarComponent {
     eventClick: this.handleEventClick,
   };
 
-  constructor(private appointmentService: AppointmentService, private playerService: JugadorService, private paymentsService: PlayerPaymentsService) { }
-
-  // En el ngOnInit, al recargar la pagina se ejecutara primero
-  ngOnInit(): void {
-    this.getEventsAndPlayers();
-    this.setEventsAndPlayers()
-  }
-
-  // ---------------------------------------------------- Obtencion de Appointments y Players al mismo tiempo (forkJoin) ----------------------------------------------------
-  getEventsAndPlayers() {
-    // obtengo eventos y jugadores al mismo tiempo
-    forkJoin({ players: this.playerService.getAllJugadores(), appointments: this.appointmentService.getAllAppointments() }).subscribe(results => {
-      //Le asigno los eventos a la variable appointments
-      this.appointments = results.appointments;
-      //Le asigno los jugadores a la variable players
-      this.players = results.players;
-      //Armo el vento con los jugadores seleccionados y con la informacion de cada uno
-      this.appointmentsWithPlayers = results.appointments.map((appointment) => { //Recorro evento por evento
-        return {
-          ...appointment,
-          appointmentPlayers: appointment.appointmentPlayers.map((player) => { //Recorro lista de jugadores dentro de cada evento
-            const playerInfo = results.players.find((value) => value.id === player.playerId);
-            if (playerInfo) {
-              return {
-                ...player,
-                playerWhoAttended: {
-                  name: playerInfo.nombre,
-                  lastName: playerInfo.apellido,
-                  id: playerInfo.id
-                },
-              };
-            }
-            return player;
-          }),
-        }
-      });
+  constructor(
+    private appointmentService: AppointmentService,
+    private playerService: JugadorService,
+    private paymentsService: PlayerPaymentsService,
+    public formBuilder: FormBuilder
+  ) {
+    this.newAppointmentForm = this.formBuilder.group({
+      appointmentStartDate: [''],
+      appointmentStartTime: [''],
+      appointmentEndTime: [''],
+      attendanceAndPayments: this.formBuilder.array([])
     })
   }
 
-  // ---------------------------------------------------- Seteo la información de los servicios, al calendario ----------------------------------------------------
-  setEventsAndPlayers() {
-    //Verifico se this.appointmentsWithPlayers existe
-    if (this.appointmentsWithPlayers && this.appointmentsWithPlayers.length > 0) {
-      //Armo el evento con los jugadores y su información
-      const setAppointmentWithPlayers: EventSourceInput = this.appointmentsWithPlayers.map(appointment => {
-        const playersString = Array.isArray(appointment.appointmentPlayers) ? appointment.appointmentPlayers.map(value => `${value.playerWhoAttended.name} ${value.playerWhoAttended.lastName}`).join(", ") : '';
+  ngOnInit(): void {
+    this.getAppointmentsAndPlayers();
+  }
+
+  // ---------------------------------------------------- Obtencion de Appointments y Players al mismo tiempo (forkJoin) ----------------------------------------------------
+  getAppointmentsAndPlayers() {
+    // obtengo citas y jugadores al mismo tiempo
+    forkJoin({ players: this.playerService.getAllJugadores(), appointments: this.appointmentService.getAllAppointments() }).subscribe(results => {
+      this.allPlayers = results.players;
+      this.allAppointments = results.appointments;
+
+      // Armo el objeto de appointments y players juntos
+      this.combinedAppointmentsWithPlayers = this.allAppointments.map((appointment) => {
+
+        // Armo la parte del objeto de appointmentPlayers, comparando el id del listado de jugadores con el id que le llega a appointmentPlayers
         return {
-          //Se le pasa los datos del nuevo appointment a la informacion del calendario
-          title: playersString,
-          start: appointment.appointmentStartDate + ' ' + appointment.appointmentStartTime,
-          end: appointment.appointmentStartDate + ' ' + appointment.appointmentEndTime,
-          id: appointment.id
-        };
+          ...appointment,
+          appointmentPlayers: appointment.appointmentPlayers.map((playerIdOfAppointment) => {
+            const playerIdComparison = this.allPlayers.filter((player) => {
+              return player.id === playerIdOfAppointment.playerId;
+            })
+            return {
+              ...playerIdOfAppointment
+            }
+          })
+        }
       })
-      //Le asigno los eventos con diuchos jugadores y su información a la propiedad que pertenece a FullCalendar "events"
-      this.calendarOptions.events = setAppointmentWithPlayers;
+      //Seteo eventos y jugadores al calendario
+      this.setAppointmentsAndPlayers();
+      return this.combinedAppointmentsWithPlayers;
+    });
+
+  }
+
+  // ---------------------------------------------------- Seteo la información de los servicios, al calendario ----------------------------------------------------
+  setAppointmentsAndPlayers() {
+    if (this.combinedAppointmentsWithPlayers && this.combinedAppointmentsWithPlayers.length > 0) {
+      const setAppointmentWithPlayers: EventSourceInput = {
+        events: this.combinedAppointmentsWithPlayers.map((appointment) => {
+          //Mapeo los jugadores
+          const playerProperty = appointment.appointmentPlayers.map((playerIdOfAppointmentPlayer) => {
+            const playerFiltered = this.allPlayers.filter((player) => player.id === playerIdOfAppointmentPlayer.playerId);
+            return playerFiltered.map((p) => `${p.nombre} ${p.apellido}`).join(', ');
+          }).join(', ');
+
+          return {
+            title: playerProperty,
+            start: appointment.appointmentStartDate + ' ' + appointment.appointmentStartTime,
+            end: appointment.appointmentStartDate + ' ' + appointment.appointmentEndTime,
+            id: appointment.id.toString()
+          }
+        })
+      };
+      this.calendarOptions.events = setAppointmentWithPlayers.events;
     }
+  }
+
+  //Obtengo por id la partde del formulario de asistencias y pagos de los jugadores
+  getAttendancesAndPayments(): FormArray {
+    return this.newAppointmentForm.get('attendanceAndPayments') as FormArray;
+  }
+
+  // Inserto las propiedades de appointmentPlayers a la parte del formulario obtenido por id
+  addAttendancesAndPayments() {
+    this.getAttendancesAndPayments().push(this.newAttendanceAndPayment());
+  }
+
+  //Inicializo las propiedades de appointmentPlayers
+  newAttendanceAndPayment() {
+    return this.formBuilder.group({
+      playerId: 0,
+      moneyPaid: 0,
+      attended: false
+    });
   }
 
   // ---------------------------------------------------- Creación de Appointment ----------------------------------------------------
   //Creo tarea y actualizo el calendario
   createAppointment(appointment: Appointment): void {
-    //Tengo un appointment nuevo
+    //Creo un nuevo objeto appointment
     const newAppointment: Appointment = {
-      appointmentPlayers: appointment.appointmentPlayers,
-      appointmentStartDate: appointment.appointmentStartDate,
-      appointmentStartTime: appointment.appointmentStartTime,
-      appointmentEndTime: appointment.appointmentEndTime
-    };
-    // #TODO (opcional): Se puede agregar una validación para saber si el formulario que envió está ok
-    //Llamo al servicio
-    this.appointmentService.createAppointment(appointment).subscribe({
-      next(appointment) {
-        alert('Se creó el Entrenamiento exitosamente');
-      },
-      error(err) {
-        console.error(err);
-        alert('Ocurrió un error al intentar crear el jugEntrenamientoador');
-      },
-    });
+      appointmentPlayers: this.newAppointmentForm.get('attendanceAndPayments').value.map(playerData => ({
+        playerId: parseInt(playerData.playerId),
+        moneyPaid: playerData.moneyPaid,
+        attended: playerData.attended
+      })),
+      appointmentStartDate: this.newAppointmentForm.get('appointmentStartDate').value,
+      appointmentStartTime: this.newAppointmentForm.get('appointmentStartTime').value,
+      appointmentEndTime: this.newAppointmentForm.get('appointmentEndTime').value
+    }
+
+    if (this.newAppointmentForm?.valid) {
+      // Llamo al servicio
+      this.appointmentService.createAppointment(newAppointment).subscribe({
+        next(appointment) {
+          alert('Se creó el Entrenamiento exitosamente');
+        },
+        error(err) {
+          console.error(err);
+          alert('Ocurrió un error al intentar crear el jugEntrenamientoador');
+        },
+      });
+    }
+    //Actualizo la lista de appointments y players
+    this.getAppointmentsAndPlayers();
+    //Limpio el formulario
+    this.newAppointmentForm.reset();
   }
 
   // ---------------------------------------------------- Actualización de Appointments ----------------------------------------------------
   //CRUD: "ACTUALIZAR"
   updateAppointmentsInCalendar(appointment: Appointment) {
-    // Modifico el evento
+    //  Modifico el evento
     const appointmentModified: Appointment = {
       appointmentPlayers: appointment.appointmentPlayers,
       appointmentStartDate: appointment.appointmentStartDate,
@@ -202,22 +241,22 @@ export class CalendarComponent {
       id: this.selectedAppointmentId
     };
 
-    //  llamo al servicio
+    // llamo al servicio
     this.appointmentService.updateEAppointments(appointmentModified).subscribe(() => {
       alert('Se actualizo el entrenamiento exitosamente');
     })
-    //  Cierro el modal del formulario de modificacion despues de borrar
+    // Cierro el modal del formulario de modificacion despues de borrar
     const modal = new bootstrap.Modal(this.exampleModalModification.nativeElement);
     modal.hide();
   }
 
-  // ---------------------------------------------------- Borrar Appointments ----------------------------------------------------
-  // CRUD: "BORRAR"
+  //  ----------------------------------------------------Borrar Appointments----------------------------------------------------
+  CRUD: "BORRAR"
   deleteAppointmentInCalendar(appointmentId: number): void {
     this.appointmentService.deleteAppointmentsById(appointmentId).subscribe(() => {
       alert('Se elimino el entrenamiento exitosamente');
     });
-    //  Cierro el modal del formulario de modificacion despues de borrar
+    // Cierro el modal del formulario de modificacion despues de borrar
     const modal = new bootstrap.Modal(this.exampleModalModification.nativeElement);
     modal.hide();
   }
