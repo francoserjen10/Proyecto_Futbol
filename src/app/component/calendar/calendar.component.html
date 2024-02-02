@@ -19,7 +19,7 @@
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form (submit)="createAppointmentAndCleanForm(appointment)">
+                <form [formGroup]="newAppointmentForm" (submit)="createAppointment(appointment)">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="exampleModalLabel">Actividad</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -29,42 +29,60 @@
                         <div class="mb-3">
                             <label for="appointmentStartDate" class="form-label">Fecha de inicio</label>
                             <input type="date" class="form-control" id="appointmentStartDate" name="input 1"
-                                placeholder="Ingrese fecha de inicio" [(ngModel)]="appointment.appointmentStartDate">
+                                placeholder="Ingrese fecha de inicio" formControlName="appointmentStartDate" />
                         </div>
 
                         <div class="mb-3">
                             <label for="appointmentStartTime" class="form-label">Horario de inicio</label>
                             <input type="time" class="form-control" id="appointmentStartTime" name="input 2"
-                                placeholder="Ingrese horario de inicio" [(ngModel)]="appointment.appointmentStartTime">
+                                placeholder="Ingrese horario de inicio" formControlName="appointmentStartTime">
                         </div>
 
                         <div class="mb-3">
                             <label for="appointmentEndTime" class="form-label">Horario de finalizacion</label>
                             <input type="time" class="form-control" id="appointmentEndTime" name="input 3"
-                                placeholder="Ingrese horario de finalizacion"
-                                [(ngModel)]="appointment.appointmentEndTime">
+                                placeholder="Ingrese horario de finalizacion" formControlName="appointmentEndTime">
                         </div>
-                        <div class="containerOfPaymentsAndAssistance" *ngIf="players && players.length > 0">
-                            <!-- Asistencias -->
-                            <div class="assistanceOfPlayers">
-                                <div *ngFor="let player of players; let i = index" class="mb-3">
-                                    <label for="assistance" class="form-label">Asistencia</label>
-                                    <select name="selectedPlayer{{ i }}" id="assistance{{ i }}"
-                                        [(ngModel)]="appointment.appointmentPlayers[i]">
-                                        <option *ngFor="let playerOption of players" [ngValue]="player">
-                                            {{playerOption.nombre}} {{playerOption.apellido}}
-                                        </option>
-                                    </select>
-                                </div>
-                            </div>
 
-                            <!-- Pagos -->
-                            <div class="paymentsOfPlayers">
-                                <div *ngFor="let player of players; let i = index">
-                                    <label for="payments">Pagó/No pagó</label>
-                                    <input type="checkbox" id="payments{{ i }}" name="pay"
-                                        [(ngModel)]="appointment.appointmentPlayers">
-                                </div>
+                        <!-- =============================================== Asistencias y pagos =============================================== -->
+                        <div>
+                            Asistencia y pago de jugadores:
+                            <button type="button" (click)="addAttendancesAndPayments()">
+                                Agregar Jugador
+                            </button>
+
+                            <div formArrayName="attendanceAndPayments">
+                                <ng-container
+                                    *ngFor="let statusOfPlayer of getAttendancesAndPayments().controls; index as i">
+                                    <ng-container [ngTemplateOutlet]="attendancesAndPaymentsBlock"
+                                        [ngTemplateOutletContext]="{ i: i }">
+                                    </ng-container>
+                                </ng-container>
+
+                                <ng-template #attendancesAndPaymentsBlock let-i="i">
+                                    <div class="row" [formGroupName]="i">
+                                        <div class="col">
+                                            <div>
+                                                <label>Jugador</label>
+                                                <select id="{{ 'playerId' + i }}" formControlName="playerId">
+                                                    <option *ngFor="let player of allPlayers" [value]="player.id">
+                                                        {{ player.nombre }}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            &NonBreakingSpace;
+                                            <div>
+                                                <input type="checkbox" id="{{ 'attended' + i }}"
+                                                    placeholder="Asistio/No Asistio" formControlName="attended" />
+                                            </div>
+                                            &NonBreakingSpace;
+                                            <div>
+                                                <input type="number" id="{{ 'moneyPaid' + i }}"
+                                                    placeholder="Monto abonado" formControlName="moneyPaid" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-template>
                             </div>
                         </div>
                     </div>
@@ -119,7 +137,7 @@
                     <!-- Botones -->
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
-                            (click)="deleteAppointmentAndCleanForm(selectedAppointmentId)">Borrar</button>
+                            (click)="deleteAppointmentInCalendar(selectedAppointmentId)">Borrar</button>
                         <button type="submit" class="btn btn-success">Modificar Actividad</button>
                     </div>
                 </form>
