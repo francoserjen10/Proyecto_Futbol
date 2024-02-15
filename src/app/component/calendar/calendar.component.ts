@@ -151,14 +151,16 @@ export class CalendarComponent {
         // Armo la parte del objeto de appointmentPlayers, comparando el id del listado de jugadores con el id que le llega a appointmentPlayers
         return {
           ...appointment,
-          appointmentPlayers: appointment.appointmentPlayers.map((playerIdOfAppointment) => {
+          appointmentPlayers: Array.isArray(appointment.appointmentPlayers) ? appointment.appointmentPlayers.map((playerIdOfAppointment) => {
             const playerIdComparison = this.allPlayers.filter((player) => {
               return player.id === playerIdOfAppointment.playerId;
             })
             return {
               ...playerIdOfAppointment
-            }
+            };
           })
+            //Si no es un arreglo, se devuelve el mismo valor sin hacer ninguna operacion
+            : appointment.appointmentPlayers
         }
       })
       //Seteo eventos y jugadores al calendario
@@ -173,8 +175,10 @@ export class CalendarComponent {
     if (this.combinedAppointmentsWithPlayers && this.combinedAppointmentsWithPlayers.length > 0) {
       const setAppointmentWithPlayers: EventSourceInput = {
         events: this.combinedAppointmentsWithPlayers.map((appointment) => {
+          const appointmentPlayersArray = Array.isArray(appointment.appointmentPlayers) ? appointment.appointmentPlayers
+            : [];
           //Mapeo los jugadores
-          const playerProperty = appointment.appointmentPlayers.map((playerIdOfAppointmentPlayer) => {
+          const playerProperty = appointmentPlayersArray.map((playerIdOfAppointmentPlayer) => {
             const playerFiltered = this.allPlayers.filter((player) => player.id === playerIdOfAppointmentPlayer.playerId);
             return playerFiltered.map((p) => `${p.nombre} ${p.apellido}`).join(', ');
           }).join(', ');
