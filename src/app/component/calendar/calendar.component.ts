@@ -26,6 +26,7 @@ export class CalendarComponent {
   @ViewChild('exampleModalModification') exampleModalModification: ElementRef;
 
   newAppointmentForm: FormGroup;
+  updateAppointmentForm: FormGroup;
   // ---------------------------------------------------- Inicializacion de interfaz  ----------------------------------------------------
   //Inicializacion de la interfas
   //Tambien la puedo usar para limpiar el formulario
@@ -44,26 +45,31 @@ export class CalendarComponent {
   selectedAppointmentId: number;
 
   handleEventClick = (info: any) => {
-    // --------------------------------- Appointment ---------------------------------
-    //Le asigno el appointment seleccionado
+    // --------------------------------- Appointment / id ---------------------------------
     const appointment = info.event;
-
-    // --------------------------------- Appointment Id ---------------------------------
-    //Le asigno el id del appointment seleccionado
     this.selectedAppointmentId = info.event.id;
+
+    const appointmentsAndPlayers = this.combinedAppointmentsWithPlayers.find(ap => ap.id.toString() === this.selectedAppointmentId.toString());
+    if (appointmentsAndPlayers) {
+      const playersAttendancesAndPayments = appointmentsAndPlayers.appointmentPlayers.map(player => this.formBuilder.group({
+        attended: player.attended,
+        moneyPaid: player.moneyPaid,
+        playerId: player.playerId
+      }));
+      this.updateAppointmentForm.setControl("updateAttendanceAndPayments", this.formBuilder.array(playersAttendancesAndPayments || []))
+    };
+
     // --------------------------------- Appointment Date/Hour ---------------------------------
-    // toISOString() = Se usa para formatear un objeto de fecha en una cadena de texto en formato de fecha ISO
-    // .split('T')[0] = Y aca se quiere extraer solo la parte de la fecha y asi puede aparecer en el formulario
-    this.appointment.appointmentStartDate = appointment.start.toISOString().split('T')[0];
-    // [1] = accede al segundo elemento del arreglo que es la parte de la hora
-    // .substring(0, 5) = toma los primeros 5 caracteres de la cadena de la hora que en el formato ISO, representa las dos primeras cifras del valor de la hora
-    this.appointment.appointmentStartTime = appointment.start.toISOString().split('T')[1].substring(0, 5);
-    this.appointment.appointmentEndTime = appointment.end.toISOString().split('T')[1].substring(0, 5);
-
-    // --------------------------------- Appointment title ---------------------------------
-    //Le asigna la información de los jugadores seleccionados a this.appointment.appointmentPlayers
-    this.appointment.appointmentPlayers = appointment.title;
-
+    this.updateAppointmentForm.patchValue({
+      appointmentStartDate: appointment.start.toISOString().split('T')[0],
+      // toISOString() = Se usa para formatear un objeto de fecha en una cadena de texto en formato de fecha ISO
+      // .split('T')[0] = Y aca se quiere extraer solo la parte de la fecha y asi puede aparecer en el formulario
+      appointmentStartTime: appointment.start.toISOString().split('T')[1].substring(0, 5),
+      appointmentEndTime: appointment.end.toISOString().split('T')[1].substring(0, 5),
+      // [1] = accede al segundo elemento del arreglo que es la parte de la hora
+      // .substring(0, 5) = toma los primeros 5 caracteres de la cadena de la hora que en el formato ISO, representa las dos primeras cifras del valor de la hora
+      updateAttendanceAndPayments: appointmentsAndPlayers.appointmentPlayers
+    });
     // --------------------------------- Open modification form ---------------------------------
     //Abro el modal del formulario de modificacion
     const modal = new bootstrap.Modal(this.exampleModalModification.nativeElement);
@@ -112,11 +118,19 @@ export class CalendarComponent {
     private paymentsService: PlayerPaymentsService,
     public formBuilder: FormBuilder
   ) {
+    //Nuevo formulario de creación
     this.newAppointmentForm = this.formBuilder.group({
       appointmentStartDate: [''],
       appointmentStartTime: [''],
       appointmentEndTime: [''],
       attendanceAndPayments: this.formBuilder.array([])
+    });
+    //Nuevo formulario de modificación
+    this.updateAppointmentForm = this.formBuilder.group({
+      appointmentStartDate: [''],
+      appointmentStartTime: [''],
+      appointmentEndTime: [''],
+      updateAttendanceAndPayments: this.formBuilder.array([])
     })
   }
 
@@ -177,18 +191,39 @@ export class CalendarComponent {
     }
   }
 
-  //Obtengo por id la partde del formulario de asistencias y pagos de los jugadores
+  // ---------------------------------------------------- Formulario de creación ----------------------------------------------------
+  //Obtengo el formulario de modificación de asistencias y pagos de los jugadores 
   getAttendancesAndPayments(): FormArray {
     return this.newAppointmentForm.get('attendanceAndPayments') as FormArray;
   }
 
-  // Inserto las propiedades de appointmentPlayers a la parte del formulario obtenido por id
+  // Inserto las propiedades de appointmentPlayers a la parte del formulario de modificación
   addAttendancesAndPayments() {
     this.getAttendancesAndPayments().push(this.newAttendanceAndPayment());
   }
 
   //Inicializo las propiedades de appointmentPlayers
   newAttendanceAndPayment() {
+    return this.formBuilder.group({
+      playerId: 0,
+      moneyPaid: 0,
+      attended: false
+    });
+  }
+
+  // ---------------------------------------------------- Formulario de modificación ----------------------------------------------------
+  //Obtengo el formulario de modificación de asistencias y pagos de los jugadores 
+  getUpdateAttendancesAndPayments(): FormArray {
+    return this.updateAppointmentForm.get('updateAttendanceAndPayments') as FormArray;
+  }
+
+  // Inserto las propiedades de appointmentPlayers a la parte del formulario de modificación
+  addUpdateAttendancesAndPayments() {
+    this.getUpdateAttendancesAndPayments().push(this.newUpdateAttendanceAndPayment());
+  }
+
+  //Inicializo las propiedades de appointmentPlayers
+  newUpdateAttendanceAndPayment() {
     return this.formBuilder.group({
       playerId: 0,
       moneyPaid: 0,
@@ -232,22 +267,34 @@ export class CalendarComponent {
   // ---------------------------------------------------- Actualización de Appointments ----------------------------------------------------
   //CRUD: "ACTUALIZAR"
   updateAppointmentsInCalendar(appointment: Appointment) {
-    //  Modifico el evento
-    const appointmentModified: Appointment = {
-      appointmentPlayers: appointment.appointmentPlayers,
-      appointmentStartDate: appointment.appointmentStartDate,
-      appointmentStartTime: appointment.appointmentStartTime,
-      appointmentEndTime: appointment.appointmentEndTime,
-      id: this.selectedAppointmentId
-    };
+    //Verifico updateAppointmentForm
+    if (this.updateAppointmentForm?.valid) {
+      //  Modifico el evento
+      const appointmentModified: Appointment = {
+        appointmentPlayers: this.updateAppointmentForm.get('updateAttendanceAndPayments').value.map(updatePlayerData => ({
+          playerId: parseInt(updatePlayerData.playerId),
+          moneyPaid: updatePlayerData.moneyPaid,
+          attended: updatePlayerData.attended
+        })),
+        appointmentStartDate: this.updateAppointmentForm.get('appointmentStartDate').value,
+        appointmentStartTime: this.updateAppointmentForm.get('appointmentStartTime').value,
+        appointmentEndTime: this.updateAppointmentForm.get('appointmentEndTime').value,
+        id: this.selectedAppointmentId
+      };
 
-    // llamo al servicio
-    this.appointmentService.updateEAppointments(appointmentModified).subscribe(() => {
-      alert('Se actualizo el entrenamiento exitosamente');
-    })
-    // Cierro el modal del formulario de modificacion despues de borrar
-    const modal = new bootstrap.Modal(this.exampleModalModification.nativeElement);
-    modal.hide();
+      // llamo al servicio
+      this.appointmentService.updateEAppointments(appointmentModified).subscribe((value) => {
+        alert('Se actualizo el entrenamiento exitosamente');
+      });
+      this.appointment = {} as Appointment;
+    }
+    //Obtengo los eventos nuevamente
+    this.getAppointmentsAndPlayers();
+
+    // #TODO: Hacer que se cierre el modal despues de actualizar
+
+    // Limpio el formulario
+    this.updateAppointmentForm.reset();
   }
 
   //  ----------------------------------------------------Borrar Appointments----------------------------------------------------
@@ -259,5 +306,6 @@ export class CalendarComponent {
     // Cierro el modal del formulario de modificacion despues de borrar
     const modal = new bootstrap.Modal(this.exampleModalModification.nativeElement);
     modal.hide();
+    // #TODO: Renderizar la pagina para que se se eliminen rapidamente los appointments
   }
 }

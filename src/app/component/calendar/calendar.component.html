@@ -86,7 +86,6 @@
                             </div>
                         </div>
                     </div>
-
                     <!-- Botones -->
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
@@ -102,7 +101,7 @@
         aria-hidden="true" #exampleModalModification>
         <div class="modal-dialog">
             <div class="modal-content">
-                <form (submit)="updateAppointmentsInCalendar(appointment)">
+                <form [formGroup]="updateAppointmentForm" (submit)="updateAppointmentsInCalendar(appointment)">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="exampleModalLabel">Actividad a Modificar</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -112,26 +111,60 @@
                         <div class="mb-3">
                             <label for="appointmentStartDate" class="form-label">Fecha de inicio</label>
                             <input type="date" class="form-control" id="appointmentStartDate" name="input 1"
-                                placeholder="Ingrese fecha de inicio" [(ngModel)]="appointment.appointmentStartDate">
+                                placeholder="Ingrese fecha de inicio" formControlName="appointmentStartDate">
                         </div>
 
                         <div class="mb-3">
                             <label for="appointmentStartTime" class="form-label">Horario de inicio</label>
                             <input type="time" class="form-control" id="appointmentStartTime" name="input 2"
-                                placeholder="Ingrese horario de inicio" [(ngModel)]="appointment.appointmentStartTime">
+                                placeholder="Ingrese horario de inicio" formControlName="appointmentStartTime">
                         </div>
 
                         <div class="mb-3">
                             <label for="appointmentEndTime" class="form-label">Horario de finalizacion</label>
                             <input type="time" class="form-control" id="appointmentEndTime" name="input 3"
-                                placeholder="Ingrese horario de finalizacion"
-                                [(ngModel)]="appointment.appointmentEndTime">
+                                placeholder="Ingrese horario de finalizacion" formControlName="appointmentEndTime">
                         </div>
+                        <!-- =============================================== Asistencias y pagos =============================================== -->
+                        <div>
+                            Asistencia y pago de jugadores:
+                            <button type="button" (click)="addUpdateAttendancesAndPayments()">
+                                Modificar Jugador
+                            </button>
 
-                        <div class="mb-3">
-                            <label for="appointmentPlayers" class="form-label">Asistencia</label>
-                            <textarea class="form-control" id="appointmentPlayers" name="input 4"
-                                placeholder="Ingrese jugadores" [(ngModel)]="appointment.appointmentPlayers"></textarea>
+                            <div formArrayName="updateAttendanceAndPayments">
+                                <ng-container
+                                    *ngFor="let statusOfPlayer of getUpdateAttendancesAndPayments().controls; index as i">
+                                    <ng-container [ngTemplateOutlet]="updateAttendancesAndPaymentsBlock"
+                                        [ngTemplateOutletContext]="{ i: i }">
+                                    </ng-container>
+                                </ng-container>
+
+                                <ng-template #updateAttendancesAndPaymentsBlock let-i="i">
+                                    <div class="row" [formGroupName]="i">
+                                        <div class="col">
+                                            <div>
+                                                <label>Jugador</label>
+                                                <select id="{{ 'playerId' + i }}" formControlName="playerId">
+                                                    <option *ngFor="let player of allPlayers" [value]="player.id">
+                                                        {{ player.nombre }} {{ player.apellido }}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            &NonBreakingSpace;
+                                            <div>
+                                                <input type="checkbox" id="{{ 'attended' + i }}"
+                                                    placeholder="Asistio/No Asistio" formControlName="attended" />
+                                            </div>
+                                            &NonBreakingSpace;
+                                            <div>
+                                                <input type="number" id="{{ 'moneyPaid' + i }}"
+                                                    placeholder="Monto abonado" formControlName="moneyPaid" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </div>
                         </div>
                     </div>
                     <!-- Botones -->
