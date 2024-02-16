@@ -12,7 +12,6 @@ import { Appointment } from 'src/app/interfaces/appointment';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { JugadorService } from 'src/app/services/jugador.service';
 import { Jugador } from 'src/app/interfaces/Jugador';
-import { PlayerPaymentsService } from 'src/app/services/player-payments.service';
 import { forkJoin } from 'rxjs';
 
 @Component({
@@ -115,7 +114,6 @@ export class CalendarComponent {
   constructor(
     private appointmentService: AppointmentService,
     private playerService: JugadorService,
-    private paymentsService: PlayerPaymentsService,
     public formBuilder: FormBuilder
   ) {
     //Nuevo formulario de creación
@@ -249,7 +247,7 @@ export class CalendarComponent {
       appointmentStartTime: this.newAppointmentForm.get('appointmentStartTime').value,
       appointmentEndTime: this.newAppointmentForm.get('appointmentEndTime').value
     }
-
+    
     if (this.newAppointmentForm?.valid) {
       // Llamo al servicio
       this.appointmentService.createAppointment(newAppointment).subscribe({
