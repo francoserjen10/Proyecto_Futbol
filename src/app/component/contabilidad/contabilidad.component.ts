@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { forkJoin } from 'rxjs';
 import { Jugador } from 'src/app/interfaces/Jugador';
 import { Appointment } from 'src/app/interfaces/appointment';
-import { PlayerPaymentInfo } from 'src/app/interfaces/player-payment-info';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { JugadorService } from 'src/app/services/jugador.service';
 
@@ -15,7 +14,6 @@ import { JugadorService } from 'src/app/services/jugador.service';
 export class ContabilidadComponent {
   addAppointments: Appointment[];
   addPlayers: Jugador[];
-  extractPlayerPayments: PlayerPaymentInfo[] = [];
   filterForm: FormGroup;
 
   constructor(private appointmentService: AppointmentService, private playerService: JugadorService, private formBuilder: FormBuilder) {
