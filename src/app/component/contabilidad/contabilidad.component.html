@@ -3,7 +3,7 @@
         <h1>Contabilidad</h1>
     </div>
     <!-- --------------------------------------- FILTROS --------------------------------------- -->
-    <form [formGroup]="filterForm" (submit)="filterPlayer()">
+    <form [formGroup]="filterForm" (submit)="applyFilter()">
 
         <div>
             <!-- filtrar por dia -->
@@ -19,7 +19,7 @@
                 </option>
             </select>
             <!-- Algun boton donde ejecute el filtro -->
-            <button type="submit" class="btn btn-primary">Filter</button>
+            <button type="submit" class="btn btn-primary">Filtrar</button>
         </div>
     </form>
 </div>
