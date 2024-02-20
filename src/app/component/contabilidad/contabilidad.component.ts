@@ -18,7 +18,8 @@ export class ContabilidadComponent {
 
   constructor(private appointmentService: AppointmentService, private playerService: JugadorService, private formBuilder: FormBuilder) {
     this.filterForm = this.formBuilder.group({
-      filteredDate: ['']
+      filteredDate: [''],
+      filteredPlayer: ['']
     });
   }
   // #TODO:     
@@ -34,10 +35,31 @@ export class ContabilidadComponent {
     });
   }
 
+  //Codigo listo donde se obtiene el id del jugador seleccionado en el select, los pagos realizados y su asistencia(opcional), a travez del input select
+  filterPlayer() {
+    const getFilteredPlayer = this.filterForm.get('filteredPlayer').value;
+    if (getFilteredPlayer) {
+      const filteredPlayer = this.addAppointments.map((ap) => {
+
+        const player = ap.appointmentPlayers.find((p) => p.playerId.toString() === getFilteredPlayer);
+
+        if (player) {
+          const playerId = player.playerId;
+          const amountPaid = player.moneyPaid;
+
+          return {
+            player
+          }
+        } else {
+          return null;
+        }
+      });
+    }
+  }
+
   //Codigo listo donde se obtiene el id de los jugadores que transcurrieron en esa fecha y el pago realizado por los mismos, a travez de la fecha ingresada en el input Date
   filterDate() {
     const getFilteredDate = this.filterForm.get('filteredDate').value;
-
     if (getFilteredDate) {
       const filteredAppointments = this.addAppointments.filter(ap => ap.appointmentStartDate === getFilteredDate);
 

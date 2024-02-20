@@ -3,12 +3,22 @@
         <h1>Contabilidad</h1>
     </div>
     <!-- --------------------------------------- FILTROS --------------------------------------- -->
-    <form [formGroup]="filterForm" (submit)="filterDate()">
+    <form [formGroup]="filterForm" (submit)="filterPlayer()">
+
         <div>
             <!-- filtrar por dia -->
             <label for="filterDate">"Filtrar por fecha"</label>
             <input type="date" id="filterDate" formControlName="filteredDate">
-
+            <br>
+            <br>
+            <!-- filtrar por jugador -->
+            <label for="filterPlayer">"Filtrar por jugador"</label>
+            <select id="filterPlayer" formControlName="filteredPlayer">
+                <option *ngFor="let player of addPlayers" [value]="player.id">
+                    {{player.nombre}} {{player.apellido}}
+                </option>
+            </select>
+            <!-- Algun boton donde ejecute el filtro -->
             <button type="submit" class="btn btn-primary">Filter</button>
         </div>
     </form>
