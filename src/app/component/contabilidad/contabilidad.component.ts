@@ -35,8 +35,53 @@ export class ContabilidadComponent {
     });
   }
 
+  //Boton del filtro 
+  applyFilter() {
+    //Unificar los dos metodos de filtros (Player/Date)
+    const getFilteredDate = this.filterForm.get('filteredDate').value;
+    const getFilteredPlayer = this.filterForm.get('filteredPlayer').value;
+
+    //1- si hay fecha y jugador
+    if (getFilteredDate && getFilteredPlayer) {
+      this.filterByDateAndPlayer();
+
+      //2- si hay fecha
+    } else if (getFilteredDate) {
+      this.filterByDate()
+
+      //3- se hay jugador
+    } else if (getFilteredPlayer) {
+      this.filterByPlayer()
+
+    } else {
+      console.log("***¡¡¡Filtrá los pagos!!!***")
+    }
+
+  }
+
+  // Metodo donde se filtra por fecha y por jugador
+  filterByDateAndPlayer() {
+    const getFilteredDate = this.filterForm.get('filteredDate').value;
+    const getFilteredPlayer = this.filterForm.get('filteredPlayer').value;
+
+    const filteredAppointments = this.addAppointments.filter(ap => ap.appointmentStartDate === getFilteredDate);
+
+    if (filteredAppointments && filteredAppointments.length > 0) {
+      filteredAppointments.map(ap => {
+        const player = ap.appointmentPlayers.find(p => p.playerId.toString() === getFilteredPlayer);
+
+        if (player) {
+          const selectedPlayer = player.playerId;
+          const amountPaid = player.moneyPaid;
+        }
+      });
+    } else {
+      console.warn("*No se encontraron eventos con esa fecha*!!!")
+    }
+  }
+
   //Codigo listo donde se obtiene el id del jugador seleccionado en el select, los pagos realizados y su asistencia(opcional), a travez del input select
-  filterPlayer() {
+  filterByPlayer() {
     const getFilteredPlayer = this.filterForm.get('filteredPlayer').value;
     if (getFilteredPlayer) {
       const filteredPlayer = this.addAppointments.map((ap) => {
@@ -44,7 +89,7 @@ export class ContabilidadComponent {
         const player = ap.appointmentPlayers.find((p) => p.playerId.toString() === getFilteredPlayer);
 
         if (player) {
-          const playerId = player.playerId;
+          const selectedPlayer = player.playerId;
           const amountPaid = player.moneyPaid;
 
           return {
@@ -58,7 +103,7 @@ export class ContabilidadComponent {
   }
 
   //Codigo listo donde se obtiene el id de los jugadores que transcurrieron en esa fecha y el pago realizado por los mismos, a travez de la fecha ingresada en el input Date
-  filterDate() {
+  filterByDate() {
     const getFilteredDate = this.filterForm.get('filteredDate').value;
     if (getFilteredDate) {
       const filteredAppointments = this.addAppointments.filter(ap => ap.appointmentStartDate === getFilteredDate);
