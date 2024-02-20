@@ -2,4 +2,14 @@
     <div class="title">
         <h1>Contabilidad</h1>
     </div>
+    <!-- --------------------------------------- FILTROS --------------------------------------- -->
+    <form [formGroup]="filterForm" (submit)="filterDate()">
+        <div>
+            <!-- filtrar por dia -->
+            <label for="filterDate">"Filtrar por fecha"</label>
+            <input type="date" id="filterDate" formControlName="filteredDate">
+
+            <button type="submit" class="btn btn-primary">Filter</button>
+        </div>
+    </form>
 </div>
