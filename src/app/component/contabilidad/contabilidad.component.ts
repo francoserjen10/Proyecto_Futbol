@@ -62,6 +62,10 @@ export class ContabilidadComponent {
       console.log("***¡¡¡Filtrá los pagos!!!***")
     }
 
+    //En el caso de que no se haya seleccionado ni fecha ni jugadores, al apretar el botón de filtrado, se limpia la tabla
+    if (!getFilteredDate && getFilteredPlayer) {
+      this.filteredInformation = [];
+    }
   }
 
   // Metodo donde se filtra por fecha y por jugador
