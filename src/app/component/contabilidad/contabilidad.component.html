@@ -14,6 +14,7 @@
             <!-- filtrar por jugador -->
             <label for="filterPlayer">"Filtrar por jugador"</label>
             <select id="filterPlayer" formControlName="filteredPlayer">
+                <option value="">Seleccione...</option>
                 <option *ngFor="let player of addPlayers" [value]="player.id">
                     {{player.nombre}} {{player.apellido}}
                 </option>
@@ -22,4 +23,24 @@
             <button type="submit" class="btn btn-primary">Filtrar</button>
         </div>
     </form>
+    <!-- --------------------------------------- TABLA DE INFORMACIÓN --------------------------------------- -->
+    <div *ngIf="filteredInformation.length > 0">
+        <!-- Mostrar la informacion del jugador -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre y Apellido</th>
+                    <th>Fecha</th>
+                    <th>Monto</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor=" let info of filteredInformation">
+                    <td>{{info.playerName}} {{info.playerLastName}}</td>
+                    <td>{{info.playerDate}}</td>
+                    <td>${{info.playerAmount}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>

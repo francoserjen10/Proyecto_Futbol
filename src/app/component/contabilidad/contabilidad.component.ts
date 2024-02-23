@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { forkJoin } from 'rxjs';
 import { Jugador } from 'src/app/interfaces/Jugador';
 import { Appointment } from 'src/app/interfaces/appointment';
+import { PlayerPaymentInfo } from 'src/app/interfaces/player-payment-info';
 import { AppointmentService } from 'src/app/services/appointment.service';
 import { JugadorService } from 'src/app/services/jugador.service';
 
@@ -14,6 +15,7 @@ import { JugadorService } from 'src/app/services/jugador.service';
 export class ContabilidadComponent {
   addAppointments: Appointment[];
   addPlayers: Jugador[];
+  filteredInformation: PlayerPaymentInfo[] = [];
   filterForm: FormGroup;
 
   constructor(private appointmentService: AppointmentService, private playerService: JugadorService, private formBuilder: FormBuilder) {
@@ -43,14 +45,17 @@ export class ContabilidadComponent {
 
     //1- si hay fecha y jugador
     if (getFilteredDate && getFilteredPlayer) {
+      this.filteredInformation = [];
       this.filterByDateAndPlayer();
 
       //2- si hay fecha
     } else if (getFilteredDate) {
+      this.filteredInformation = [];
       this.filterByDate()
 
       //3- se hay jugador
     } else if (getFilteredPlayer) {
+      this.filteredInformation = [];
       this.filterByPlayer()
 
     } else {
@@ -68,11 +73,27 @@ export class ContabilidadComponent {
 
     if (filteredAppointments && filteredAppointments.length > 0) {
       filteredAppointments.map(ap => {
-        const player = ap.appointmentPlayers.find(p => p.playerId.toString() === getFilteredPlayer);
+        const player = ap.appointmentPlayers.find((p) => p.playerId.toString() === getFilteredPlayer);
 
         if (player) {
-          const selectedPlayer = player.playerId;
-          const amountPaid = player.moneyPaid;
+          //Comparo el id ya comparado anteriormente (del jugador encontrado), para obtener la informacion completa del jugador
+          const selectedPlayerId = player.playerId;
+          //Encuentro esa informacion del jugador en el listado de jugadores
+          const selectedPlayer = this.addPlayers.find(player => player.id === selectedPlayerId);
+
+          this.filteredInformation.push({
+            playerName: selectedPlayer.nombre,
+            playerLastName: selectedPlayer.apellido,
+            playerDate: ap.appointmentStartDate,
+            playerAmount: player.moneyPaid,
+            playerId: player.playerId
+          });
+
+        } else {
+          undefined;
+          //#TODO: 
+          //Corregir el alerta, porque al haber dos eventos en el mismo dia, si el jugador no asistió a ninguno, el alerta se repite la misma cantidad de veces que de eventos en ese dia
+          alert(`El jugador seleccionado no asistió al entrenamiento`);
         }
       });
     } else {
@@ -86,17 +107,24 @@ export class ContabilidadComponent {
     if (getFilteredPlayer) {
       const filteredPlayer = this.addAppointments.map((ap) => {
 
-        const player = ap.appointmentPlayers.find((p) => p.playerId.toString() === getFilteredPlayer);
+        const playerPayments = ap.appointmentPlayers.find((p) => p.playerId.toString() === getFilteredPlayer);
 
-        if (player) {
-          const selectedPlayer = player.playerId;
-          const amountPaid = player.moneyPaid;
+        if (playerPayments) {
+          const selectedPlayerId = playerPayments.playerId;
+          const selectedPlayer = this.addPlayers.find(player => player.id === selectedPlayerId);
 
-          return {
-            player
+          if (selectedPlayer) {
+            this.filteredInformation.push({
+              playerName: selectedPlayer.nombre,
+              playerLastName: selectedPlayer.apellido,
+              playerDate: ap.appointmentStartDate,
+              playerAmount: playerPayments.moneyPaid,
+              playerId: playerPayments.playerId
+            });
           }
+
         } else {
-          return null;
+          null;
         }
       });
     }
@@ -111,14 +139,28 @@ export class ContabilidadComponent {
       //Obtengo el/los eventos de esa fecha
       if (filteredAppointments && filteredAppointments.length > 0) {
         //Recorro sobre los eventos filtrados
-        filteredAppointments.forEach(ap => {
+        filteredAppointments.map(ap => {
           const payments = ap.appointmentPlayers;
 
-          //Recorro sobre los pagos de cada evento filtrado
-          payments.forEach(payment => {
-            const playerId = payment.playerId;
-            const amountPaid = payment.moneyPaid;
-          });
+          if (payments) {
+            //Recorro sobre los pagos de cada evento filtrado
+            payments.map(payment => {
+              const selectedPlayerId = payment.playerId;
+              const selectedPlayer = this.addPlayers.find(player => player.id === selectedPlayerId);
+
+              if (selectedPlayer) {
+                this.filteredInformation.push({
+                  playerName: selectedPlayer.nombre,
+                  playerLastName: selectedPlayer.apellido,
+                  playerDate: ap.appointmentStartDate,
+                  playerAmount: payment.moneyPaid,
+                  playerId: payment.playerId
+                });
+              }
+              //#TODO: Preguntar a tincho sobre el manejo de errores en este else 
+            });
+          }
+          //#TODO: Preguntar a tincho sobre el manejo de errores en este else 
         });
 
       } else {
