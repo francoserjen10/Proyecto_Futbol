@@ -51,21 +51,18 @@ export class ContabilidadComponent {
       //2- si hay fecha
     } else if (getFilteredDate) {
       this.filteredInformation = [];
-      this.filterByDate()
+      this.filterByDate();
 
       //3- se hay jugador
     } else if (getFilteredPlayer) {
       this.filteredInformation = [];
-      this.filterByPlayer()
+      this.filterByPlayer();
 
+      //En el caso de que no se haya seleccionado ni fecha ni jugadores, al apretar el botón de filtrado, se limpia la tabla
     } else {
-      console.log("***¡¡¡Filtrá los pagos!!!***")
-    }
-
-    //En el caso de que no se haya seleccionado ni fecha ni jugadores, al apretar el botón de filtrado, se limpia la tabla
-    if (!getFilteredDate && getFilteredPlayer) {
       this.filteredInformation = [];
     }
+
   }
 
   // Metodo donde se filtra por fecha y por jugador
@@ -103,6 +100,7 @@ export class ContabilidadComponent {
     } else {
       console.warn("*No se encontraron eventos con esa fecha*!!!")
     }
+    return;
   }
 
   //Codigo listo donde se obtiene el id del jugador seleccionado en el select, los pagos realizados y su asistencia(opcional), a travez del input select
@@ -132,6 +130,7 @@ export class ContabilidadComponent {
         }
       });
     }
+    return;
   }
 
   //Codigo listo donde se obtiene el id de los jugadores que transcurrieron en esa fecha y el pago realizado por los mismos, a travez de la fecha ingresada en el input Date
@@ -174,5 +173,6 @@ export class ContabilidadComponent {
     } else {
       console.error("La fecha del filtro no es valida");
     }
+    return;
   }
 }
