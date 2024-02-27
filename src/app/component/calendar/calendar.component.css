@@ -7,6 +7,20 @@ button {
     margin: 10px 0;
 }
 
-.containerOfPaymentsAndAssistance {
+.row {
     display: flex;
+}
+
+.col {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+select {
+    width: 200px;
+}
+
+input[type="checkbox"] {
+    transform: scale(2);
 }

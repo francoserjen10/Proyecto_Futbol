@@ -22,7 +22,7 @@ import { forkJoin } from 'rxjs';
 
 export class CalendarComponent {
 
-  @ViewChild('exampleModalModification') exampleModalModification: ElementRef;
+  @ViewChild('modificationModal') modificationModal: ElementRef;
 
   newAppointmentForm: FormGroup;
   updateAppointmentForm: FormGroup;
@@ -71,7 +71,7 @@ export class CalendarComponent {
     });
     // --------------------------------- Open modification form ---------------------------------
     //Abro el modal del formulario de modificacion
-    const modal = new bootstrap.Modal(this.exampleModalModification.nativeElement);
+    const modal = new bootstrap.Modal(this.modificationModal.nativeElement);
     modal.show();
   };
 
@@ -247,7 +247,7 @@ export class CalendarComponent {
       appointmentStartTime: this.newAppointmentForm.get('appointmentStartTime').value,
       appointmentEndTime: this.newAppointmentForm.get('appointmentEndTime').value
     }
-    
+
     if (this.newAppointmentForm?.valid) {
       // Llamo al servicio
       this.appointmentService.createAppointment(newAppointment).subscribe({
@@ -262,8 +262,7 @@ export class CalendarComponent {
     }
     //Actualizo la lista de appointments y players
     this.getAppointmentsAndPlayers();
-    //Limpio el formulario
-    this.newAppointmentForm.reset();
+    this.clearCreateForm();
   }
 
   // ---------------------------------------------------- Actualización de Appointments ----------------------------------------------------
@@ -293,10 +292,6 @@ export class CalendarComponent {
     //Obtengo los eventos nuevamente
     this.getAppointmentsAndPlayers();
 
-    // #TODO: Hacer que se cierre el modal despues de actualizar
-
-    // Limpio el formulario
-    this.updateAppointmentForm.reset();
   }
 
   //  ----------------------------------------------------Borrar Appointments----------------------------------------------------
@@ -306,8 +301,20 @@ export class CalendarComponent {
       alert('Se elimino el entrenamiento exitosamente');
     });
     // Cierro el modal del formulario de modificacion despues de borrar
-    const modal = new bootstrap.Modal(this.exampleModalModification.nativeElement);
+    this.closeUpdateModal();
+    // Se actualiza el listado de appointments
+    this.getAppointmentsAndPlayers();
+  }
+
+  //  ----------------------------------------------------Limpiar Formulario de creación----------------------------------------------------
+  clearCreateForm() {
+    //Limpio el formulario
+    this.newAppointmentForm.reset();
+    this.newAppointmentForm.setControl("attendanceAndPayments", this.formBuilder.array([]));
+  }
+
+  closeUpdateModal() {
+    const modal = new bootstrap.Modal(this.modificationModal.nativeElement);
     modal.hide();
-    // #TODO: Renderizar la pagina para que se se eliminen rapidamente los appointments
   }
 }
