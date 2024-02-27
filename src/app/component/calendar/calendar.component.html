@@ -63,7 +63,7 @@
                                         <div class="col">
                                             <div class="form-group">
                                                 <select class="form-select" id="{{ 'playerId' + i }}"
-                                                    formControlName="playerId" aria-placeholder="Jugador">
+                                                    formControlName="playerId">
                                                     <option value="" selected>Seleccione...</option>
                                                     <option *ngFor="let player of allPlayers" [value]="player.id">
                                                         {{ player.nombre }}
@@ -127,9 +127,8 @@
                                 placeholder="Ingrese horario de finalizacion" formControlName="appointmentEndTime">
                         </div>
                         <!-- =============================================== Asistencias y pagos =============================================== -->
-                        <div>
-                            Asistencia y pago de jugadores:
-                            <button type="button" (click)="addUpdateAttendancesAndPayments()">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-secondary" (click)="addUpdateAttendancesAndPayments()">
                                 Modificar Jugador
                             </button>
 
@@ -144,22 +143,23 @@
                                 <ng-template #updateAttendancesAndPaymentsBlock let-i="i">
                                     <div class="row" [formGroupName]="i">
                                         <div class="col">
-                                            <div>
-                                                <label>Jugador</label>
-                                                <select id="{{ 'playerId' + i }}" formControlName="playerId">
+                                            <div class="form-group">
+                                                <select class="form-select" id="{{ 'playerId' + i }}"
+                                                    formControlName="playerId">
+                                                    <option value="" selected>Seleccione...</option>
                                                     <option *ngFor="let player of allPlayers" [value]="player.id">
                                                         {{ player.nombre }} {{ player.apellido }}
                                                     </option>
                                                 </select>
                                             </div>
                                             &NonBreakingSpace;
-                                            <div>
-                                                <input type="checkbox" id="{{ 'attended' + i }}"
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" id="{{ 'attended' + i }}"
                                                     placeholder="Asistio/No Asistio" formControlName="attended" />
                                             </div>
                                             &NonBreakingSpace;
-                                            <div>
-                                                <input type="number" id="{{ 'moneyPaid' + i }}"
+                                            <div class="form-group">
+                                                <input type="number" class="form-control" id="{{ 'moneyPaid' + i }}"
                                                     placeholder="Monto abonado" formControlName="moneyPaid" />
                                             </div>
                                         </div>

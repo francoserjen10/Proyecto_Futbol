@@ -13,12 +13,12 @@ button {
 
 .col {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
 }
 
 select {
-    width: 150px;
+    width: 200px;
 }
 
 input[type="checkbox"] {
