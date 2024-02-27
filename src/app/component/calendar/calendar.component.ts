@@ -307,7 +307,8 @@ export class CalendarComponent {
     // Cierro el modal del formulario de modificacion despues de borrar
     const modal = new bootstrap.Modal(this.exampleModalModification.nativeElement);
     modal.hide();
-    // #TODO: Renderizar la pagina para que se se eliminen rapidamente los appointments
+    // Se actualiza el listado de appointments
+    this.getAppointmentsAndPlayers();
   }
 
   //  ----------------------------------------------------Limpiar Formulario de creación----------------------------------------------------
