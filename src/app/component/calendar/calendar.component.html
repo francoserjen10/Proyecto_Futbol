@@ -45,9 +45,8 @@
                         </div>
 
                         <!-- =============================================== Asistencias y pagos =============================================== -->
-                        <div>
-                            Asistencia y pago de jugadores:
-                            <button type="button" (click)="addAttendancesAndPayments()">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" (click)="addAttendancesAndPayments()">
                                 Agregar Jugador
                             </button>
 
@@ -62,22 +61,24 @@
                                 <ng-template #attendancesAndPaymentsBlock let-i="i">
                                     <div class="row" [formGroupName]="i">
                                         <div class="col">
-                                            <div>
-                                                <label>Jugador</label>
-                                                <select id="{{ 'playerId' + i }}" formControlName="playerId">
+                                            <div class="form-group">
+                                                <select class="form-select" id="{{ 'playerId' + i }}"
+                                                    formControlName="playerId" aria-placeholder="Jugador">
+                                                    <option value="" selected>Seleccione...</option>
                                                     <option *ngFor="let player of allPlayers" [value]="player.id">
                                                         {{ player.nombre }}
                                                     </option>
                                                 </select>
                                             </div>
                                             &NonBreakingSpace;
-                                            <div>
-                                                <input type="checkbox" id="{{ 'attended' + i }}"
-                                                    placeholder="Asistio/No Asistio" formControlName="attended" />
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input"
+                                                    id="{{ 'attended' + i }}" placeholder="Asistio/No Asistio"
+                                                    formControlName="attended" />
                                             </div>
                                             &NonBreakingSpace;
-                                            <div>
-                                                <input type="number" id="{{ 'moneyPaid' + i }}"
+                                            <div class="form-group">
+                                                <input type="number" class="form-control" id="{{ 'moneyPaid' + i }}"
                                                     placeholder="Monto abonado" formControlName="moneyPaid" />
                                             </div>
                                         </div>
