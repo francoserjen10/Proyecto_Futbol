@@ -5,7 +5,7 @@
 
     <div class="buttonContainerModal">
         <!-- Boton para abrir el modal -->
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#creationModal">
             Crear actividad
         </button>
     </div>
@@ -16,12 +16,12 @@
     </div>
 
     <!-- Modal-Formulario -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="creationModal" tabindex="-1" aria-labelledby="creationModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <form [formGroup]="newAppointmentForm" (submit)="createAppointment(appointment)">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Actividad</h1>
+                        <h1 class="modal-title fs-5" id="creationModalLabel">Actividad</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -98,13 +98,13 @@
     </div>
 
     <!-- Modal-Formulario-Modificacion -->
-    <div class="modal fade" id="exampleModalModification" tabindex="-1" aria-labelledby="exampleModalLabel"
-        aria-hidden="true" #exampleModalModification>
+    <div class="modal fade" id="modificationModal" tabindex="-1" aria-labelledby="modificationModalLabel"
+        aria-hidden="true" #modificationModal>
         <div class="modal-dialog">
             <div class="modal-content">
                 <form [formGroup]="updateAppointmentForm" (submit)="updateAppointmentsInCalendar(appointment)">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Actividad a Modificar</h1>
+                        <h1 class="modal-title fs-5" id="modificationModalLabel">Actividad a Modificar</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -154,8 +154,9 @@
                                             </div>
                                             &NonBreakingSpace;
                                             <div class="form-check">
-                                                <input type="checkbox" class="form-check-input" id="{{ 'attended' + i }}"
-                                                    placeholder="Asistio/No Asistio" formControlName="attended" />
+                                                <input type="checkbox" class="form-check-input"
+                                                    id="{{ 'attended' + i }}" placeholder="Asistio/No Asistio"
+                                                    formControlName="attended" />
                                             </div>
                                             &NonBreakingSpace;
                                             <div class="form-group">

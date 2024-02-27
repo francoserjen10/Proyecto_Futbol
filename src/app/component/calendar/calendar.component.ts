@@ -22,7 +22,7 @@ import { forkJoin } from 'rxjs';
 
 export class CalendarComponent {
 
-  @ViewChild('exampleModalModification') exampleModalModification: ElementRef;
+  @ViewChild('modificationModal') modificationModal: ElementRef;
 
   newAppointmentForm: FormGroup;
   updateAppointmentForm: FormGroup;
@@ -71,7 +71,7 @@ export class CalendarComponent {
     });
     // --------------------------------- Open modification form ---------------------------------
     //Abro el modal del formulario de modificacion
-    const modal = new bootstrap.Modal(this.exampleModalModification.nativeElement);
+    const modal = new bootstrap.Modal(this.modificationModal.nativeElement);
     modal.show();
   };
 
@@ -314,7 +314,7 @@ export class CalendarComponent {
   }
 
   closeUpdateModal() {
-    const modal = new bootstrap.Modal(this.exampleModalModification.nativeElement);
+    const modal = new bootstrap.Modal(this.modificationModal.nativeElement);
     modal.hide();
   }
 }
