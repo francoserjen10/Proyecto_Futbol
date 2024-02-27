@@ -247,7 +247,7 @@ export class CalendarComponent {
       appointmentStartTime: this.newAppointmentForm.get('appointmentStartTime').value,
       appointmentEndTime: this.newAppointmentForm.get('appointmentEndTime').value
     }
-    
+
     if (this.newAppointmentForm?.valid) {
       // Llamo al servicio
       this.appointmentService.createAppointment(newAppointment).subscribe({
@@ -262,8 +262,7 @@ export class CalendarComponent {
     }
     //Actualizo la lista de appointments y players
     this.getAppointmentsAndPlayers();
-    //Limpio el formulario
-    this.newAppointmentForm.reset();
+    this.clearForm();
   }
 
   // ---------------------------------------------------- Actualización de Appointments ----------------------------------------------------
@@ -309,5 +308,12 @@ export class CalendarComponent {
     const modal = new bootstrap.Modal(this.exampleModalModification.nativeElement);
     modal.hide();
     // #TODO: Renderizar la pagina para que se se eliminen rapidamente los appointments
+  }
+
+  //  ----------------------------------------------------Limpiar Formulario de creación----------------------------------------------------
+  clearForm() {
+    //Limpio el formulario
+    this.newAppointmentForm.reset();
+    this.newAppointmentForm.setControl("attendanceAndPayments", this.formBuilder.array([]));
   }
 }
