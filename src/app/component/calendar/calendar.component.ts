@@ -262,7 +262,7 @@ export class CalendarComponent {
     }
     //Actualizo la lista de appointments y players
     this.getAppointmentsAndPlayers();
-    this.clearForm();
+    this.clearCreateForm();
   }
 
   // ---------------------------------------------------- Actualización de Appointments ----------------------------------------------------
@@ -292,10 +292,6 @@ export class CalendarComponent {
     //Obtengo los eventos nuevamente
     this.getAppointmentsAndPlayers();
 
-    // #TODO: Hacer que se cierre el modal despues de actualizar
-
-    // Limpio el formulario
-    this.updateAppointmentForm.reset();
   }
 
   //  ----------------------------------------------------Borrar Appointments----------------------------------------------------
@@ -305,16 +301,20 @@ export class CalendarComponent {
       alert('Se elimino el entrenamiento exitosamente');
     });
     // Cierro el modal del formulario de modificacion despues de borrar
-    const modal = new bootstrap.Modal(this.exampleModalModification.nativeElement);
-    modal.hide();
+    this.closeUpdateModal();
     // Se actualiza el listado de appointments
     this.getAppointmentsAndPlayers();
   }
 
   //  ----------------------------------------------------Limpiar Formulario de creación----------------------------------------------------
-  clearForm() {
+  clearCreateForm() {
     //Limpio el formulario
     this.newAppointmentForm.reset();
     this.newAppointmentForm.setControl("attendanceAndPayments", this.formBuilder.array([]));
+  }
+
+  closeUpdateModal() {
+    const modal = new bootstrap.Modal(this.exampleModalModification.nativeElement);
+    modal.hide();
   }
 }
