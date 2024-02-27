@@ -2,4 +2,48 @@
     <div class="title">
         <h1>Contabilidad</h1>
     </div>
+    <!-- --------------------------------------- FILTROS --------------------------------------- -->
+    <form [formGroup]="filterForm" (submit)="applyFilter()">
+
+        <div class="mb-3">
+            <!-- filtrar por dia -->
+            <label for="filterDate" class="form-label">"Filtrar por fecha"</label>
+            <input type="date" class="form-control" id="filterDate" formControlName="filteredDate">
+        </div>
+        <div class="mb-3">
+            <!-- filtrar por jugador -->
+            <label for="filterPlayer" class="form-label">"Filtrar por jugador"</label>
+            <select class="form-select" aria-label="Default select example" id="filterPlayer"
+                formControlName="filteredPlayer">
+                <option value="">Seleccione...</option>
+                <option *ngFor="let player of addPlayers" [value]="player.id">
+                    {{player.nombre}} {{player.apellido}}
+                </option>
+            </select>
+        </div>
+        <div>
+            <!-- Algun boton donde ejecute el filtro -->
+            <button type="submit" class="btn btn-primary">Filtrar</button>
+        </div>
+    </form>
+    <!-- --------------------------------------- TABLA DE INFORMACIÓN --------------------------------------- -->
+    <div *ngIf="filteredInformation.length > 0">
+        <!-- Mostrar la informacion del jugador -->
+        <table class="table table-dark table-striped">
+            <thead>
+                <tr>
+                    <th>Nombre y Apellido</th>
+                    <th>Fecha</th>
+                    <th>Monto</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor=" let info of filteredInformation">
+                    <td>{{info.playerName}} {{info.playerLastName}}</td>
+                    <td>{{info.playerDate}}</td>
+                    <td>${{info.playerAmount}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>

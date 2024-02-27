@@ -48,5 +48,19 @@
       "appointmentEndTime": "20:13",
       "id": 3
     }
+  ],
+  "payments": [
+    {
+      "pay": true,
+      "amount": "$1000",
+      "id": 1
+    }
+  ],
+  "asisstance": [
+    {
+      "name": "Franco",
+      "lastName": "Serjen",
+      "id": 1
+    }
   ]
 }

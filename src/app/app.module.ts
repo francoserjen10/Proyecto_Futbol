@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { FullCalendarModule } from '@fullcalendar/angular';
 
+import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { JugadorComponent } from './component/jugador/jugador.component';
@@ -14,6 +15,8 @@ import { NuevoJugadorComponent } from './component/nuevo-jugador/nuevo-jugador.c
 import { HttpClientModule } from '@angular/common/http';
 import { CalendarComponent } from './component/calendar/calendar.component';
 import { FooterComponent } from './component/footer/footer.component';
+import { ReactiveFormsModule } from '@angular/forms';
+
 
 @NgModule({
   declarations: [
@@ -30,9 +33,11 @@ import { FooterComponent } from './component/footer/footer.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    RouterModule,
     FormsModule,
     HttpClientModule,
-    FullCalendarModule
+    FullCalendarModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
