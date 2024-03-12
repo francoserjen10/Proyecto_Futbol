@@ -35,31 +35,16 @@
   ],
   "appointment": [
     {
-      "appointmentPlayers": "453543",
-      "appointmentStartDate": "2023-11-29",
-      "appointmentStartTime": "20:09",
-      "appointmentEndTime": "20:09",
-      "id": 2
-    },
-    {
-      "appointmentPlayers": "84545",
-      "appointmentStartDate": "2023-11-29",
-      "appointmentStartTime": "20:13",
-      "appointmentEndTime": "20:13",
-      "id": 3
-    }
-  ],
-  "payments": [
-    {
-      "pay": true,
-      "amount": "$1000",
-      "id": 1
-    }
-  ],
-  "asisstance": [
-    {
-      "name": "Franco",
-      "lastName": "Serjen",
+      "appointmentPlayers": [
+        {
+          "playerId": 1,
+          "moneyPaid": 15000,
+          "attended": true
+        }
+      ],
+      "appointmentStartDate": "2024-03-12",
+      "appointmentStartTime": "16:30",
+      "appointmentEndTime": "18:00",
       "id": 1
     }
   ]
